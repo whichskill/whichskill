@@ -1,0 +1,37 @@
+name: CI
+
+# The host runs `astro build`, so the corpus integrity gate fires on every
+# deploy whether this workflow exists or not. What the host does NOT run is the
+# test suite — so a change could break reference normalisation, or quietly
+# remove the gate itself, and still deploy green. That is what this catches.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run check
+
+      - name: Tests
+        # Includes the negative build test: it asserts that a chain referencing a
+        # skill outside skills.json fails the build before route generation.
+        run: npm test
+
+      - name: Build
+        run: npm run build
