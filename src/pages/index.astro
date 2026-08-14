@@ -1,0 +1,64 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { TAGLINE } from '../lib/site.ts';
+import { TERRAINS } from '../content.config.ts';
+
+const chains = (await getCollection('chains')).sort((a, b) =>
+  a.data.situation.localeCompare(b.data.situation),
+);
+const arbitrations = await getCollection('arbitrations');
+const arbitratedTerrains = new Set(arbitrations.map((a) => a.data.terrain));
+
+// A chain carries an arbitration when one of its notRun entries points at one.
+// `first` is the command as typed, taken from the entry rather than derived from
+// the id — `superpowers/brainstorming` is invoked as `/superpowers:brainstorming`.
+const rows = await Promise.all(
+  chains.map(async (chain) => {
+    const first = await getEntry('skills', chain.data.steps[0]!.ref.id);
+    return {
+      id: chain.id,
+      title: chain.data.title,
+      first: first?.data.name ?? chain.data.steps[0]!.ref.id,
+      more: chain.data.steps.length > 1,
+      hasArbitration: (chain.data.notRun ?? []).some((n) => n.seeArbitration),
+    };
+  }),
+);
+---
+
+<Base title="Which skill" description={TAGLINE}>
+  <article class="plate">
+    <div class="eyebrow">
+      <span>whichskill</span>
+      <span>{rows.length} situation{rows.length > 1 ? 's' : ''} · {arbitrations.length} arbitration{arbitrations.length > 1 ? 's' : ''}</span>
+    </div>
+    <hr class="rule" />
+
+    <h1>You have too many skills.</h1>
+    <p class="subtitle">
+      Ordered chains, indexed by the situation you are actually in. Every step says why it is
+      there, and every chain says what you do not run.
+    </p>
+
+    <nav class="index">
+      {
+        rows.map((row) => (
+          <a href={`/c/${row.id}`}>
+            <span class="t">{row.title}</span>
+            <span class="meta">
+              {!row.hasArbitration && <span class="missing">arbitration missing</span>}
+              <span class="first">{row.first}{row.more ? ' →' : ''}</span>
+            </span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <p class="note">
+      {arbitratedTerrains.size} of {TERRAINS.length} terrains are arbitrated. The rest are written
+      as chains only — the argument for which skill wins is the part that takes the longest to
+      write, and the part nobody else publishes.
+    </p>
+  </article>
+</Base>

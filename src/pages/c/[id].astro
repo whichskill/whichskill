@@ -1,0 +1,92 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SkillName from '../../components/SkillName.astro';
+import { renderVerdict } from '../../lib/verdict.ts';
+
+export async function getStaticPaths() {
+  const chains = await getCollection('chains');
+  const all = chains.sort((a, b) => a.data.situation.localeCompare(b.data.situation));
+  return all.map((chain, i) => ({
+    params: { id: chain.id },
+    props: { chain, position: i + 1, total: all.length },
+  }));
+}
+
+const { chain, position, total } = Astro.props;
+const d = chain.data;
+
+// Arbitration slugs cited by this chain, resolved for the "see the full argument" links.
+const cited = await Promise.all(
+  (d.notRun ?? []).map(async (n) =>
+    n.seeArbitration ? await getEntry('arbitrations', n.seeArbitration.id) : undefined,
+  ),
+);
+---
+
+<Base title={d.situation} description={d.subtitle ?? d.verdict}>
+  <article class="plate">
+    <div class="eyebrow">
+      <span>{String(position).padStart(2, '0')} / {total}</span>
+      <span>Chain · {d.steps.length} step{d.steps.length > 1 ? 's' : ''}</span>
+    </div>
+    <hr class="rule" />
+
+    <h1>{d.title}</h1>
+
+    <!-- The page's single amber occurrence. -->
+    <p class="verdict" set:html={renderVerdict(d.verdict)} />
+    {d.subtitle && <p class="subtitle">{d.subtitle}</p>}
+
+    <ol class="ledger">
+      {
+        d.steps.map((step, i) => (
+          <li class="step">
+            <span class="num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="skill">
+              <SkillName id={step.ref.id} repeat={step.repeat} showPack />
+            </span>
+            {step.produces && <span class="produces">{step.produces}</span>}
+            <p class="why">{step.why}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    {
+      d.substitutes && d.substitutes.length > 0 && (
+        <section class="aside">
+          <h2 class="section-label">Swap in</h2>
+          {d.substitutes.map((s) => (
+            <p>
+              <SkillName id={s.ref.id} /> instead of <SkillName id={s.insteadOf.id} /> — {s.why}
+            </p>
+          ))}
+        </section>
+      )
+    }
+
+    {
+      d.notRun && d.notRun.length > 0 && (
+        <section class="notrun">
+          <h2>What you do not run</h2>
+          {d.notRun.map((n, i) => (
+            <p>
+              <SkillName id={n.ref.id} struck /> — {n.why}
+              {cited[i] && (
+                <>
+                  {' '}
+                  <a class="see" href={`/a/${cited[i]!.id}`}>
+                    the full argument
+                  </a>
+                </>
+              )}
+            </p>
+          ))}
+        </section>
+      )
+    }
+
+    {d.note && <p class="note">{d.note}</p>}
+  </article>
+</Base>

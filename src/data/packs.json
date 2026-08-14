@@ -1,0 +1,51 @@
+[
+  {
+    "pack": "gstack",
+    "label": "gstack",
+    "repoUrl": "https://github.com/garrytan/gstack",
+    "installCmd": "git clone https://github.com/garrytan/gstack ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup",
+    "license": "MIT"
+  },
+  {
+    "pack": "superpowers",
+    "label": "superpowers",
+    "repoUrl": "https://github.com/obra/superpowers",
+    "installCmd": null,
+    "license": null
+  },
+  {
+    "pack": "matt-pocock",
+    "label": "Matt Pocock engineering suite",
+    "repoUrl": null,
+    "installCmd": null,
+    "license": null
+  },
+  {
+    "pack": "specialized",
+    "label": "standalone",
+    "repoUrl": null,
+    "installCmd": null,
+    "license": null
+  },
+  {
+    "pack": "frontend-design",
+    "label": "frontend-design",
+    "repoUrl": null,
+    "installCmd": null,
+    "license": null
+  },
+  {
+    "pack": "skill-creator",
+    "label": "skill-creator",
+    "repoUrl": null,
+    "installCmd": null,
+    "license": null
+  },
+  {
+    "pack": "harness",
+    "label": "harness built-in",
+    "repoUrl": null,
+    "installCmd": null,
+    "license": null
+  }
+]

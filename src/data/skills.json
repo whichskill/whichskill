@@ -1,0 +1,614 @@
+[
+  {
+    "id": "frontend-design/frontend-design",
+    "name": "/frontend-design:frontend-design",
+    "pack": "frontend-design",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/autoplan",
+    "name": "/autoplan",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/benchmark",
+    "name": "/benchmark",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/benchmark-models",
+    "name": "/benchmark-models",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/browse",
+    "name": "/browse",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/canary",
+    "name": "/canary",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/careful",
+    "name": "/careful",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/codex",
+    "name": "/codex",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/context-restore",
+    "name": "/context-restore",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/context-save",
+    "name": "/context-save",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/cso",
+    "name": "/cso",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/design-consultation",
+    "name": "/design-consultation",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/design-html",
+    "name": "/design-html",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/design-review",
+    "name": "/design-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/design-shotgun",
+    "name": "/design-shotgun",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/devex-review",
+    "name": "/devex-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/diagram",
+    "name": "/diagram",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/document-generate",
+    "name": "/document-generate",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/document-release",
+    "name": "/document-release",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/freeze",
+    "name": "/freeze",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/gstack",
+    "name": "/gstack",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/guard",
+    "name": "/guard",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/health",
+    "name": "/health",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/investigate",
+    "name": "/investigate",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ios-clean",
+    "name": "/ios-clean",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ios-design-review",
+    "name": "/ios-design-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ios-fix",
+    "name": "/ios-fix",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ios-qa",
+    "name": "/ios-qa",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ios-sync",
+    "name": "/ios-sync",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/land-and-deploy",
+    "name": "/land-and-deploy",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/make-pdf",
+    "name": "/make-pdf",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/office-hours",
+    "name": "/office-hours",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/plan-ceo-review",
+    "name": "/plan-ceo-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/plan-design-review",
+    "name": "/plan-design-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/plan-devex-review",
+    "name": "/plan-devex-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/plan-eng-review",
+    "name": "/plan-eng-review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/qa",
+    "name": "/qa",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/qa-only",
+    "name": "/qa-only",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/retro",
+    "name": "/retro",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/review",
+    "name": "/review",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/scrape",
+    "name": "/scrape",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/setup-browser-cookies",
+    "name": "/setup-browser-cookies",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/ship",
+    "name": "/ship",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/skillify",
+    "name": "/skillify",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/spec",
+    "name": "/spec",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "gstack/unfreeze",
+    "name": "/unfreeze",
+    "pack": "gstack",
+    "kind": "skill"
+  },
+  {
+    "id": "harness/code-simplifier",
+    "name": "code-simplifier",
+    "pack": "harness",
+    "kind": "agent"
+  },
+  {
+    "id": "harness/compact",
+    "name": "/compact",
+    "pack": "harness",
+    "kind": "native"
+  },
+  {
+    "id": "matt-pocock/ask-matt",
+    "name": "/ask-matt",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/code-review",
+    "name": "/code-review",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/codebase-design",
+    "name": "/codebase-design",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/diagnosing-bugs",
+    "name": "/diagnosing-bugs",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/domain-modeling",
+    "name": "/domain-modeling",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/grill-me",
+    "name": "/grill-me",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/grill-with-docs",
+    "name": "/grill-with-docs",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/grilling",
+    "name": "/grilling",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/handoff",
+    "name": "/handoff",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/implement",
+    "name": "/implement",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/improve-codebase-architecture",
+    "name": "/improve-codebase-architecture",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/pick-ui-library",
+    "name": "/pick-ui-library",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/prototype",
+    "name": "/prototype",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/research",
+    "name": "/research",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/resolving-merge-conflicts",
+    "name": "/resolving-merge-conflicts",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/setup-pre-commit",
+    "name": "/setup-pre-commit",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/tdd",
+    "name": "/tdd",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/teach",
+    "name": "/teach",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/to-questionnaire",
+    "name": "/to-questionnaire",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/to-spec",
+    "name": "/to-spec",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/to-tickets",
+    "name": "/to-tickets",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/triage",
+    "name": "/triage",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/wait-what",
+    "name": "/wait-what",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/wayfinder",
+    "name": "/wayfinder",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/wizard",
+    "name": "/wizard",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "matt-pocock/writing-for-agents",
+    "name": "/writing-for-agents",
+    "pack": "matt-pocock",
+    "kind": "skill"
+  },
+  {
+    "id": "skill-creator/skill-creator",
+    "name": "/skill-creator:skill-creator",
+    "pack": "skill-creator",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/animation-vocabulary",
+    "name": "/animation-vocabulary",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/apple-design",
+    "name": "/apple-design",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/claude-handoff",
+    "name": "/claude-handoff",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/domain-audit",
+    "name": "/domain-audit",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/emil-design-eng",
+    "name": "/emil-design-eng",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/find-animation-opportunities",
+    "name": "/find-animation-opportunities",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/find-skills",
+    "name": "/find-skills",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/git-guardrails-claude-code",
+    "name": "/git-guardrails-claude-code",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/graphify",
+    "name": "/graphify",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/improve-animations",
+    "name": "/improve-animations",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/learn",
+    "name": "/learn",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/postgresql-code-review",
+    "name": "/postgresql-code-review",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/postgresql-optimization",
+    "name": "/postgresql-optimization",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/review-animations",
+    "name": "/review-animations",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/scrapling-official",
+    "name": "/scrapling-official",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/skillspector",
+    "name": "/skillspector",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/vercel-react-view-transitions",
+    "name": "/vercel-react-view-transitions",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/VibeSec-Skill",
+    "name": "/VibeSec-Skill",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/writing-beats",
+    "name": "/writing-beats",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/writing-fragments",
+    "name": "/writing-fragments",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "specialized/writing-shape",
+    "name": "/writing-shape",
+    "pack": "specialized",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/brainstorming",
+    "name": "/superpowers:brainstorming",
+    "pack": "superpowers",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/requesting-code-review",
+    "name": "/superpowers:requesting-code-review",
+    "pack": "superpowers",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/systematic-debugging",
+    "name": "/superpowers:systematic-debugging",
+    "pack": "superpowers",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/test-driven-development",
+    "name": "/superpowers:test-driven-development",
+    "pack": "superpowers",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/using-git-worktrees",
+    "name": "/superpowers:using-git-worktrees",
+    "pack": "superpowers",
+    "kind": "skill"
+  },
+  {
+    "id": "superpowers/writing-skills",
+    "name": "/superpowers:writing-skills",
+    "pack": "superpowers",
+    "kind": "skill"
+  }
+]
