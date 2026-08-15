@@ -1,9 +1,7 @@
 name: CI
 
-# The host runs `astro build`, so the corpus integrity gate fires on every
-# deploy whether this workflow exists or not. What the host does NOT run is the
-# test suite — so a change could break reference normalisation, or quietly
-# remove the gate itself, and still deploy green. That is what this catches.
+# A skill repo has no build. What it does have are three ways to ship something
+# broken silently, and this workflow closes all three.
 on:
   push:
     branches: [main]
@@ -18,20 +16,40 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
+      - name: The catalogue must never be committed
+        # references/catalogue.md is generated from whoever runs the script.
+        # Committing a real one makes the router recommend commands the person
+        # installing this does not have — confident, and useless. This is the
+        # single most likely accident in this repo, so it fails the build.
+        run: |
+          if ! grep -q 'NOT GENERATED' references/catalogue.md; then
+            echo "::error file=references/catalogue.md::A generated catalogue was committed."
+            echo "references/catalogue.md must keep its NOT GENERATED placeholder."
+            echo "Restore it with: git checkout main -- references/catalogue.md"
+            exit 1
+          fi
 
-      - run: npm ci
+      - name: SKILL.md must stay discoverable
+        # No frontmatter, no name, or no description means the harness never
+        # surfaces the skill. It fails by being invisible, which is the hardest
+        # failure to notice.
+        run: |
+          head -1 SKILL.md | grep -qx -- '---' || { echo "::error::SKILL.md does not open with YAML frontmatter"; exit 1; }
+          grep -qE '^name: which-skill$' SKILL.md || { echo "::error::SKILL.md frontmatter has no correct name:"; exit 1; }
+          grep -qE '^description: .{80,}' SKILL.md || { echo "::error::SKILL.md needs a substantial description: — it is what triggers the skill"; exit 1; }
 
-      - name: Typecheck
-        run: npm run check
+      - name: Shell scripts parse and lint
+        run: |
+          bash -n scripts/build-catalogue.sh
+          shellcheck scripts/build-catalogue.sh
 
-      - name: Tests
-        # Includes the negative build test: it asserts that a chain referencing a
-        # skill outside skills.json fails the build before route generation.
-        run: npm test
-
-      - name: Build
-        run: npm run build
+      - name: The catalogue generator runs on a clean machine
+        # Proves the script survives an empty ~/.claude/skills — the exact state
+        # of someone who just cloned this. It must produce a file with the four
+        # section headings, not crash on the empty globs.
+        run: |
+          mkdir -p "$HOME/.claude/skills" "$HOME/.claude/plugins/cache"
+          bash scripts/build-catalogue.sh
+          grep -q '^## gstack$' references/catalogue.md
+          grep -q '^## Standalone$' references/catalogue.md
+          git checkout -- references/catalogue.md

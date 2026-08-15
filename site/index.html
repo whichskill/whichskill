@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>which-skill — a router for people who installed too many agent skills</title>
+<meta name="description" content="Returns an ordered chain of agent skills and the arbitration already settled, instead of a list of plausible names.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0e100d; --plate:#141613; --ink:#e8eae2; --muted:#9a9d93; --rule:#474b43;
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box;border-radius:0}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:24px;-webkit-font-smoothing:antialiased}
+main{max-width:720px;margin:0 auto;padding:56px 24px 96px}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+.brand{font-family:var(--mono);font-weight:600;font-size:13px;letter-spacing:-.02em;
+  color:var(--muted);text-decoration:none}
+h1{font-size:34px;line-height:1.1;letter-spacing:-.04em;font-weight:700;margin:28px 0 18px;max-width:16ch}
+.lede{font-size:17px;line-height:27px;margin:0 0 14px;max-width:60ch}
+p{max-width:66ch}
+.muted{color:var(--muted)}
+h2{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);margin:52px 0 14px;
+  padding-bottom:8px;border-bottom:1px solid var(--rule)}
+pre{font-family:var(--mono);font-size:12.5px;line-height:21px;background:var(--plate);
+  padding:16px;overflow-x:auto;margin:0 0 12px;border-left:2px solid var(--rule)}
+code{font-family:var(--mono)}
+.example{color:var(--muted)}
+.example b{color:var(--ink);font-weight:600}
+.example s{color:var(--muted)}
+ul{padding-left:18px;max-width:66ch}
+li{margin-bottom:6px}
+footer{margin-top:64px;padding-top:16px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);
+  display:flex;gap:20px;flex-wrap:wrap}
+footer a{text-decoration:underline;text-underline-offset:3px}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="https://github.com/whichskill/whichskill">which-skill</a>
+
+  <h1>You have too many skills.</h1>
+
+  <p class="lede">Three of them debug. Two do TDD. Three review code. The question stopped being
+  <em>can my agent do this</em> a while ago — it is <em>which of these four do I run, and in what order</em>.</p>
+
+  <p>This skill answers that in one shot: an ordered chain, a one-line reason for each step that
+  needs one, and an explicit list of what you do <strong>not</strong> run.</p>
+
+  <h2>The failure mode it removes</h2>
+
+  <p>Ask any agent which skill to use and it names every plausible one. A list of nine names is
+  worse than no answer — you walk away holding the entire arbitration, which is the problem you
+  came with.</p>
+
+  <pre class="example"><b>## The chain</b>
+
+<b>/diagnosing-bugs → /freeze → /tdd → /code-review → /ship → /learn</b>
+
+<b>## Why</b>
+
+/diagnosing-bugs rather than /investigate: it refuses to theorise until a
+command goes red on this exact bug, and that refusal is the whole point
+once the first look has already failed.
+
+<b>## What you do not run</b>
+
+- <s>/investigate</s> — the right default nine times out of ten, but built to
+  move fast on a fresh lead, and this bug already survived that
+- <s>/qa</s> — finds bugs, does not diagnose them. You already have the bug.</pre>
+
+  <p class="muted">The step that makes the difference is subtraction. Someone who arrives with a
+  bug localised to the line has finished their diagnosis; handing them a debugger asks them to
+  redo, in front of you, what they just did.</p>
+
+  <h2>Install</h2>
+
+  <pre>git clone https://github.com/whichskill/whichskill ~/.claude/skills/which-skill
+bash ~/.claude/skills/which-skill/scripts/build-catalogue.sh</pre>
+
+  <p><strong>The second command is not optional.</strong> The router refuses to name a skill that
+  is not in its catalogue, and that catalogue lists what is installed on <em>your</em> machine. It
+  ships empty on purpose — shipping the author's would make the router confidently recommend
+  commands you do not have. Run it again whenever you add or remove a pack.</p>
+
+  <p>Then, in any session: <code>which skill do I run for this?</code></p>
+
+  <h2>Scope, honestly</h2>
+
+  <ul>
+    <li>The arbitration is opinionated, and it covers the packs it names.</li>
+    <li>It does not know every skill in existence. A router that pretended to would send you to
+      commands that do not exist.</li>
+    <li>Where an arbitration is missing, it says so rather than guessing.</li>
+  </ul>
+
+  <footer>
+    <a href="https://github.com/whichskill/whichskill">GitHub</a>
+    <span>Code MIT · prose CC BY-SA 4.0</span>
+  </footer>
+</main>
+</body>
+</html>

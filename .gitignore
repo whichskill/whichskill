@@ -1,10 +1,3 @@
-# build output
-dist/
-.astro/
-
-# dependencies
-node_modules/
-
 # gstack per-project state (artifacts live in ~/.gstack, not in the repo)
 .gstack/
 
@@ -14,6 +7,3 @@ node_modules/
 
 # macOS
 .DS_Store
-
-# test scratch
-.vitest/
