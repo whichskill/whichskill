@@ -1,38 +1,65 @@
 {
   "skill_name": "which-skill",
   "note": "Eval 3 is deliberately written in French. The skill must answer in the person's language, and nothing else in this suite exercises that rule.",
+  "writing_assertions": "Reserve `chain_contains` for steps that are non-negotiable for the situation — /resolving-merge-conflicts on a live conflict, /graphify on an unfamiliar codebase. For a step that merely appears in the canonical chain, assert `contains` instead: the skill's job is to adapt the chain and say why, so demanding chain membership scores a correct adaptation as a failure. That mistake was made twice while writing this suite, on /freeze and on /review, and both times the skill was right and the assertion was wrong. `chain_absent` has no such problem and can stay strict, because the skill deliberately names what it excludes.",
+  "assertion_types": {
+    "chain_contains": "the chain line (the one with arrows) must name this skill",
+    "chain_absent": "the chain line must NOT name it — note this differs from `absent`, because the skill deliberately names what it does not run",
+    "chain_max_steps": "the chain must have at most N steps; guards against padding",
+    "chain_before": "within the chain, the first skill must appear before the second",
+    "contains": "the full answer must contain this, case-insensitive",
+    "contains_any": "the full answer must contain at least one of these"
+  },
   "evals": [
     {
       "id": 0,
       "name": "verified-defects",
       "prompt": "Hold off on the plan for a second. The review found three live defects in main, not in the spec. I verified all three myself, line by line.\n\nD1 — parser.py lines 56-58 does record_count = raw.get(\"record_count\") or 1, same for the two other counters. But loader.py returns none of those three keys — grep, zero occurrences. On the API path the counters are all 1, and integrity.complete_read is ok(integrity) and records_seen == record_count, so 1 == 1 passes. verdict.py:222 then returns ACCEPTED for a payload whose size nobody knows. The guard rail written to prevent exactly that is neutralised by invented counters.\n\nD2 — reader.py:60 does items_seen = len(ids) or items_sent. The comment two lines above says items_seen comes from the READER, not from the queue. The code contradicts its own comment. When the reader returns no items_seen, integrity_ok becomes true by construction. That is the 164-sent / 32-arrived incident, reproduced.\n\nD3 — gateway.py:149 checks the signature before the timestamp, so a replayed request with a valid signature is accepted outside its window.\n\nWhat do I run?",
-      "expected_output": "The diagnosis is done and must be subtracted out loud: no /investigate, no /diagnosing-bugs — file, line and mechanism are all given. Should land on the already-diagnosed-defects chain: /freeze, then /tdd per defect BEFORE any ticket, /to-tickets only if one fix waits on another, /implement, /code-review, /review, /ship. Should add /cso because D3 is a class of flaw, not a one-off. Must not restate the diagnosis back to the user.",
-      "files": [],
-      "assertions": []
+      "expected_output": "The diagnosis is done and must be subtracted out loud: no debugger in the chain, because file, line and mechanism are all given. Should land on the already-diagnosed-defects chain: /freeze, then /tdd BEFORE any ticket, /to-tickets only if one fix waits on another, /implement, /code-review, /review, /ship. Should add /cso because D3 is a class of flaw, not a one-off.",
+      "assertions": [
+        { "type": "chain_absent", "value": "/investigate", "why": "the diagnosis is done; proposing a debugger asks the user to redo what they just did" },
+        { "type": "chain_absent", "value": "/diagnosing-bugs", "why": "same — file, line and mechanism are all in the prompt" },
+        { "type": "contains", "value": "/freeze", "why": "the blast-radius question must be answered one way or the other. Deliberately NOT chain_contains: the canonical chain opens with /freeze, but these defects span the ingest path and gateway.py, so a single-directory boundary would block half the work. Dropping it with that reason stated is the correct answer, and an assertion that demanded the manual's chain would have scored the right call as a failure." },
+        { "type": "chain_contains", "value": "/tdd", "why": "a guard rail neutralised in silence only stays fixed if a test fails on today's code" },
+        { "type": "contains", "value": "/review", "why": "the pre-landing pass must be accounted for. `contains`, not `chain_contains`, for the same reason as /freeze above — dropping it because /code-review's two axes cover a branch this size, and saying so with the condition that would bring it back, is a correct call." },
+        { "type": "chain_before", "value": ["/tdd", "/to-tickets"], "why": "the red test comes before the ticket, not after — the load-bearing ordering claim of this chain" },
+        { "type": "contains", "value": "/cso", "why": "D3 is a class of flaw; a bypassed guard rarely implies only one" },
+        { "type": "contains_any", "value": ["do not run", "don't run", "not running"], "why": "the exclusions section is mandatory and is what turns advice into a decision" }
+      ]
     },
     {
       "id": 1,
       "name": "inherited-legacy",
       "prompt": "so I'm taking over a django repo nobody has touched since 2022, ~40k lines, 60 open issues and I have no idea which are still valid, and 0 tests. my boss basically wants me to \"take ownership of it\". I don't even know which end to pick it up by. which skill",
-      "expected_output": "Position: inheriting. Map before touching anything: /graphify, /domain-audit, /health, then /triage for the 60 issues. Must not propose /spec or /office-hours — there is nothing to frame, the code already exists.",
-      "files": [],
-      "assertions": []
+      "expected_output": "Position: inheriting. Map before touching anything, then sort the 60 issues. Must not propose framing skills — there is nothing to frame, the code already exists.",
+      "assertions": [
+        { "type": "chain_contains", "value": "/graphify", "why": "mapping an unfamiliar 40k-line codebase comes before touching it" },
+        { "type": "chain_contains", "value": "/triage", "why": "60 issues the user did not write is exactly what triage is for, and not what /to-tickets is for" },
+        { "type": "chain_absent", "value": "/spec", "why": "nothing to frame — the code exists and is the specification" },
+        { "type": "chain_absent", "value": "/office-hours", "why": "the decision to build was taken in 2022" },
+        { "type": "contains_any", "value": ["/domain-audit", "/health"], "why": "reading the domain or measuring quality is the natural second step after the map" }
+      ]
     },
     {
       "id": 2,
       "name": "merge-conflict",
       "prompt": "I'm mid-rebase on feat/payments, 3 files conflicted including a migrations/0042_*.py and I understand neither side. what do I do",
-      "expected_output": "Short answer. /resolving-merge-conflicts, essentially on its own. The trap is padding the chain to look thorough when the right answer is one skill.",
-      "files": [],
-      "assertions": []
+      "expected_output": "Short answer, essentially one skill. The trap is padding the chain to look thorough when the right answer is a chain of one.",
+      "assertions": [
+        { "type": "chain_contains", "value": "/resolving-merge-conflicts", "why": "the whole answer" },
+        { "type": "chain_max_steps", "value": 2, "why": "a chain of one is the right answer here; padding it is the documented failure mode this eval exists to catch" }
+      ]
     },
     {
       "id": 3,
       "name": "intermittent-bug-french",
       "prompt": "j'ai un test qui pète en CI une fois sur dix environ, jamais en local. j'ai lancé /investigate hier dessus, ça a sorti trois hypothèses plausibles et aucune vérifiée, on a rien avancé. tu me conseilles quoi",
-      "expected_output": "Two things at once. Arbitration of the debugging duplicate: /diagnosing-bugs and not /investigate, because the bug resists and /investigate has already failed on it. Must mention the requirement for a reproducible red command before any theory. And the whole answer must be in French, since the question is.",
-      "files": [],
-      "assertions": []
+      "expected_output": "Two things at once. Arbitration of the debugging duplicate: /diagnosing-bugs and not /investigate, because the bug resists and /investigate has already failed on it. And the whole answer must be in French, since the question is.",
+      "assertions": [
+        { "type": "chain_contains", "value": "/diagnosing-bugs", "why": "the bug is intermittent and the default debugger already failed on it — the documented condition for switching" },
+        { "type": "chain_absent", "value": "/investigate", "why": "it was run yesterday and produced three unverified hypotheses" },
+        { "type": "contains_any", "value": ["parce que", "qui ", " pas ", "cette ", "déjà"], "why": "the answer must be in French: the skill answers in the person's language, and nothing else in this suite tests that rule" }
+      ]
     }
   ]
 }

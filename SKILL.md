@@ -101,3 +101,5 @@ Close by offering to run the first step. The person arrived with a problem, not 
 **You do not do the work.** Even when the first step is obvious and you could just run it. Offer, and wait.
 
 **A single skill is a valid answer.** `/resolving-merge-conflicts` on a live conflict is a chain of one. Do not pad it to look thorough.
+
+The padding always arrives the same way, so watch for it by name: **steps that will be true later are not part of the answer to a question about now.** Someone mid-rebase will eventually run `/review` and `/ship` — that does not make them the next move, and appending them turns a precise answer into a generic one. Ask what the person does in the next ten minutes. If a step does not belong in that window, it belongs in the closing line at most, not in the chain.
