@@ -59,22 +59,53 @@ dé-publie pas.
 | Générateur sur `~/.claude/skills` vide | sortie 0, 4 sections, 0 skill |
 | `evals.json` | JSON valide, 4 évals |
 | Page d'accueil | rendue et relue en 1100px |
-| `shellcheck` | **non vérifié localement** — absent de la machine d'écriture. Le run de CI de cette PR est sa première exécution réelle. |
+| `shellcheck` | **a échoué au premier run, corrigé, vert au second** — voir ci-dessous |
 
 Il n'y a plus de build ni de suite de tests : le dépôt ne contient plus de code applicatif.
 
+### Ce que shellcheck a attrapé
+
+`shellcheck` n'était pas installé sur la machine d'écriture, donc l'étape est partie non vérifiée
+et la CI est tombée rouge au premier run. Deux signalements de niveau `info` :
+
+- **SC2016** sur la chaîne de format `printf` — faux positif. Les quotes simples sont précisément
+  ce qui empêche `%s` de s'étendre avant que `printf` le voie. Supprimé avec le motif écrit en
+  commentaire.
+- **SC2020** sur `tr ' \n' '\n\n'` — signalement utile. L'ensemble d'arrivée contenait deux fois
+  `\n`, ce qui rendait l'intention ambiguë. `tr` complète seul un ensemble d'arrivée trop court
+  avec son dernier caractère, donc `tr ' \n' '\n'` fait le même travail sans le doublon.
+
+Correction vérifiée comme préservant le comportement : mêmes 123 skills, et la section Matt Pocock
+conserve ses 30 entrées — si la classification s'était cassée, elles seraient toutes tombées dans
+« Standalone ».
+
 ## PR
 
-https://github.com/whichskill/whichskill/pull/2 — ouverte, non mergée.
+https://github.com/whichskill/whichskill/pull/2 — **mergée** (merge commit `97b5db8`), branche
+supprimée. CI verte au moment du merge.
+
+## Suite : PR #3 et #4
+
+- **#3** — https://github.com/whichskill/whichskill/pull/3, mergée. Portait la mise à jour de ce
+  fichier : l'état mergé de #2, et `shellcheck` passé de « non vérifié » à « rouge, corrigé, vert ».
+- **#4** — https://github.com/whichskill/whichskill/pull/4, mergée. Rattrape deux défauts de #3 :
+  le commit qui consignait #3 n'a pas atterri sur `main`, et la numérotation ci-dessous sautait
+  le point 3.
+
+Le push direct sur `main` étant refusé par la protection de branche, corriger un fichier de
+documentation demande une branche et une PR. La protection fonctionne comme prévu ; c'est le coût
+assumé.
+
+Ces PR sont consignées ici plutôt que dans des fichiers `PR-3-*.md` et `PR-4-*.md` séparés : chaque
+rapport aurait exigé sa propre PR, qui aurait exigé son propre rapport.
 
 ## Points de suivi
 
 1. **Cloudflare Pages attend encore un build Astro.** Après merge, vider le champ « Build command »
    et mettre « Build output directory » à `site`. Tant que ce n'est pas fait, le dernier déploiement
    réussi reste en ligne : le site ne disparaît pas, il cesse d'être mis à jour.
-2. **`shellcheck`** peut signaler des avertissements au premier run de CI.
-3. **Le skill local reste la version française.** Le dépôt anglais ne le remplace pas tout seul.
-4. **`research/`** embarque trois notes, dont deux portent sur le site abandonné. Elles atterrissent
+2. **Le skill local reste la version française.** Le dépôt anglais ne le remplace pas tout seul.
+3. **`research/`** embarque trois notes, dont deux portent sur le site abandonné. Elles atterrissent
    dans le dossier de skills de chaque installateur. À trancher : les garder ou les sortir.
-5. **La distribution reste à faire.** Publier le dépôt ne le fait pas connaître ; les agrégateurs
+4. **La distribution reste à faire.** Publier le dépôt ne le fait pas connaître ; les agrégateurs
    identifiés dans `research/sources-ingestion-skills.md` sont le canal.
