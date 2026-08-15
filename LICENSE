@@ -22,13 +22,18 @@ SOFTWARE.
 
 ---
 
-The CODE in this repository is MIT, as above.
+The CODE in this repository is MIT, as above. That means scripts/.
 
-The CORPUS is not. Everything under src/content/ and corpus/ — the chains, the
-arbitrations, and the reasoning in them — is licensed CC BY-SA 4.0:
+The PROSE is not. SKILL.md, references/chains.md and references/arbitration.md —
+the method, the chains, and the reasoning that settles which skill wins — are
+licensed CC BY-SA 4.0:
 
     https://creativecommons.org/licenses/by-sa/4.0/
 
 That split is deliberate. The arbitration is the only part of this project a
 fork does not get for free, and share-alike is what stops it being absorbed
-into a closed catalogue. See DESIGN.md, Decisions Log.
+into a closed catalogue.
+
+references/catalogue.md is generated on your machine from the skills you have
+installed. It is not distributed here, and the skill names and descriptions it
+contains belong to their respective authors.

@@ -1,0 +1,80 @@
+# PR #2 — Le dépôt devient le skill, en anglais
+
+## Contexte
+
+Le projet était un site de référence publiant des chaînes de skills d'agent indexées par
+situation, avec arbitrage entre skills concurrents. Il était en ligne, avec sa CI, son gate
+d'intégrité et 28 tests.
+
+Deux constats l'ont arrêté. D'abord le corpus décrivait une seule machine : un visiteur tombait
+sur des chaînes faites de skills qu'il n'a pas installés, et repartait. Ensuite, et surtout, la
+valeur n'a jamais été le site — c'était l'arbitrage. Un skill le livre là où la décision se prend,
+dans l'agent, au lieu d'exiger une visite sur une URL.
+
+Le basculement annule au passage le plus gros coût restant du projet : les ~208 phrases `why`
+servaient uniquement à déplier sur 33 pages ce que `chains.md` et `arbitration.md` disent déjà
+sous forme compacte.
+
+## Ce qui a changé
+
+Le dépôt **est** le skill. `git clone` dans `~/.claude/skills/which-skill` l'installe.
+
+| Fichier | Nature du changement |
+|---|---|
+| `SKILL.md` | Nouveau, à la racine. Méthode et règles dures, traduites en anglais. Le frontmatter YAML est ce qui déclenche le skill. |
+| `references/chains.md` | Traduction de `chaines.md` — chaînes canoniques par type de travail |
+| `references/arbitration.md` | Traduction de `arbitrage.md` — qui gagne sur les terrains disputés |
+| `references/catalogue.md` | **Placeholder `NOT GENERATED`**, jamais le vrai catalogue |
+| `scripts/build-catalogue.sh` | Repris, commentaires et intitulés de sections en anglais |
+| `evals/evals.json` | 4 évals ; la n°0 réécrite sur du code inventé, la n°3 laissée en français |
+| `README.md` | Réécrit : problème, exemple de sortie, installation, périmètre assumé |
+| `CLAUDE.md` | Réécrit pour un dépôt de skill, avec trois règles porteuses |
+| `LICENSE` | Chemins du double licenciement corrigés — MIT pour `scripts/`, CC BY-SA pour la prose |
+| `.github/workflows/ci.yml` | Remplacé : plus de build Astro, quatre gardes propres au skill |
+| `site/index.html` | Page unique, sans build |
+| Supprimés | `src/`, `tests/`, `integrations/`, `corpus/`, `astro.config.mjs`, `package.json`, `tsconfig.json`, `vitest.config.ts`, `DESIGN.md`, `scripts/migrate-corpus.mjs`, `scripts/setup-github.sh` |
+
+Total : 74 fichiers, 1 171 insertions, 10 511 suppressions. Tout reste dans l'historique git.
+
+### Le défaut corrigé, qui aurait cassé chaque installation
+
+Le catalogue livré était celui de l'auteur. La règle dure du skill étant « n'invoque jamais un nom
+absent du catalogue », un nouvel installateur se serait fait router avec assurance vers des
+commandes qu'il n'a pas. Trois mesures : le fichier part en placeholder, `SKILL.md` impose de
+générer avant de router, et la CI échoue si un vrai catalogue est committé.
+
+### La fuite évitée
+
+L'éval n°0 contenait environ 1 600 caractères de ce qui ressemble à un projet privé — noms de
+fichiers, numéros de ligne, logique métier d'éligibilité. Réécrite sur du code inventé en
+conservant sa forme, puisque c'est l'éval qui teste l'étape de soustraction. Un dépôt public ne se
+dé-publie pas.
+
+## Vérification
+
+| Contrôle | Résultat |
+|---|---|
+| `bash -n scripts/build-catalogue.sh` | OK |
+| Générateur sur machine peuplée | 123 skills, 4 sections |
+| Générateur sur `~/.claude/skills` vide | sortie 0, 4 sections, 0 skill |
+| `evals.json` | JSON valide, 4 évals |
+| Page d'accueil | rendue et relue en 1100px |
+| `shellcheck` | **non vérifié localement** — absent de la machine d'écriture. Le run de CI de cette PR est sa première exécution réelle. |
+
+Il n'y a plus de build ni de suite de tests : le dépôt ne contient plus de code applicatif.
+
+## PR
+
+https://github.com/whichskill/whichskill/pull/2 — ouverte, non mergée.
+
+## Points de suivi
+
+1. **Cloudflare Pages attend encore un build Astro.** Après merge, vider le champ « Build command »
+   et mettre « Build output directory » à `site`. Tant que ce n'est pas fait, le dernier déploiement
+   réussi reste en ligne : le site ne disparaît pas, il cesse d'être mis à jour.
+2. **`shellcheck`** peut signaler des avertissements au premier run de CI.
+3. **Le skill local reste la version française.** Le dépôt anglais ne le remplace pas tout seul.
+4. **`research/`** embarque trois notes, dont deux portent sur le site abandonné. Elles atterrissent
+   dans le dossier de skills de chaque installateur. À trancher : les garder ou les sortir.
+5. **La distribution reste à faire.** Publier le dépôt ne le fait pas connaître ; les agrégateurs
+   identifiés dans `research/sources-ingestion-skills.md` sont le canal.
