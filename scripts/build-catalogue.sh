@@ -28,6 +28,8 @@ desc() { awk '/^description:/{sub(/^description: **/,""); gsub(/^["'"'"']|["'"'"
 emit() { # name, file
   local d; d=$(desc "$2")
   [ ${#d} -gt 240 ] && d="${d:0:237}..."
+  # shellcheck disable=SC2016  # single quotes are deliberate: this is printf's
+  # format string, and %s must reach printf unexpanded.
   printf -- '- `/%s` — %s\n' "$1" "$d"
 }
 
@@ -70,7 +72,9 @@ emit() { # name, file
     [ -e "$f" ] || continue
     n=$(basename "$(dirname "$f")"); case "$n" in _*) continue;; esac
     desc "$f" | grep -q '(gstack)' && continue
-    echo "$MATT" | tr ' \n' '\n\n' | grep -qx "$n" && continue
+    # tr pads a short destination set with its last character, so both spaces
+    # and newlines become newlines: one name per line, ready for grep -x.
+    echo "$MATT" | tr ' \n' '\n' | grep -qx "$n" && continue
     emit "$n" "$f"
   done
   # Plugin skills are invoked as `plugin:skill`, so that is how they must be
