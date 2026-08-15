@@ -84,6 +84,18 @@ conserve ses 30 entrées — si la classification s'était cassée, elles seraie
 https://github.com/whichskill/whichskill/pull/2 — **mergée** (merge commit `97b5db8`), branche
 supprimée. CI verte au moment du merge.
 
+## Suite : PR #3
+
+https://github.com/whichskill/whichskill/pull/3 — documentation seule, aucun changement du skill.
+
+Elle porte la mise à jour de ce fichier même : l'état mergé de #2, et le fait que `shellcheck`
+soit passé de « non vérifié » à « rouge puis corrigé puis vert ». Le push direct sur `main` ayant
+été refusé par la protection de branche, la correction d'un fichier de doc a dû passer par une
+branche et une PR — la protection fonctionne comme prévu.
+
+Consignée ici plutôt que dans un `PR-3-*.md` séparé : ce rapport aurait exigé une PR #4, qui en
+aurait exigé une cinquième.
+
 ## Points de suivi
 
 1. **Cloudflare Pages attend encore un build Astro.** Après merge, vider le champ « Build command »
