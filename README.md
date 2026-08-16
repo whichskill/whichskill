@@ -55,6 +55,16 @@ Then just ask, in any session:
 
 The step that makes the difference is subtraction. Someone who arrives with a bug localised to the line has finished their diagnosis; handing them a debugger asks them to redo, in front of you, what they just did. The skill looks for that evidence before it proposes anything, and says out loud which steps it removed.
 
+## Verifying it works
+
+```bash
+python3 scripts/run-evals.py
+```
+
+Four evals, eighteen assertions, run against a fixed fixture catalogue so results do not depend on what you happen to have installed. They check the things that are easy to get wrong: that a finished diagnosis is subtracted instead of repeated, that `/triage` is not confused with `/to-tickets`, that a one-skill answer is not padded, and that a French question gets a French answer.
+
+They measure routing quality, not triggering — the harness injects the skill rather than letting the harness discover it.
+
 ## Scope, honestly
 
 The arbitration is opinionated, and it covers the packs it names. It does not know every skill in existence — nobody does, and a router that pretends to would send you to commands that do not exist. The catalogue keeps it honest: if it is not installed, it is not recommended.

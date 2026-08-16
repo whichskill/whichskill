@@ -7,3 +7,10 @@
 
 # macOS
 .DS_Store
+
+# eval answers from the last run
+evals/last-run/
+
+# python bytecode
+__pycache__/
+*.pyc
