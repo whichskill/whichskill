@@ -14,3 +14,6 @@ evals/last-run/
 # python bytecode
 __pycache__/
 *.pyc
+
+# generated per machine by scripts/build-catalogue.sh — never committed
+references/catalogue.md
