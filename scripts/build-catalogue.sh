@@ -87,4 +87,77 @@ emit() { # name, file
   done
 } | awk '!/^- /{print; next} {k=$2} !seen[k]++' > "$OUT"
 
-echo "wrote $OUT ($(grep -c '^- ' "$OUT") skills)"
+# ---------------------------------------------------------------------------
+# Overlap detection.
+#
+# The arbitration this skill ships is fixed prose naming specific skills. The
+# catalogue can filter it, but it cannot produce an argument for skills nobody
+# has written about — that would be the confident, hollow output the whole skill
+# exists to prevent.
+#
+# What IS derivable is the gap: you have three skills that all look like
+# debuggers, and no published argument covers them. Saying so turns a limitation
+# into a signal, and points at where a contribution would pay.
+#
+# Keyword matching on descriptions is crude and this is labelled as a signal,
+# never a verdict. A missed overlap costs nothing; a claimed one that is wrong
+# would cost trust.
+# ---------------------------------------------------------------------------
+ARB="$HERE/references/arbitration.md"
+LOCAL_ARB="$HERE/references/arbitration.local.md"
+
+terrains() {
+  cat <<'TERRAINS'
+debug|debug|diagnos|root cause
+tdd|test-driven|red test|failing test|tdd
+review|code review|pre-landing|review the diff|reviews the
+framing|brainstorm|requirements|executable spec|design doc
+splitting|ticket|triage|backlog
+handover|handoff|context save|context restore|hand the session
+skill-making|creating .*skill|writing skills|create .*skill
+session-safety|destructive|guard rail|guardrail|restrict file edits
+TERRAINS
+}
+
+{
+  printed_header=0
+  while IFS= read -r spec; do
+    terrain=${spec%%|*}; pattern=${spec#*|}; pattern=${pattern//|/\\|}
+    matches=$(grep -iE -- "$(echo "$pattern" | sed 's/\\|/|/g')" "$OUT" 2>/dev/null | grep '^- ' || true)
+    [ -z "$matches" ] && continue
+    count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
+    [ "$count" -lt 2 ] && continue
+
+    # How many of them does the published (or local) arbitration actually name?
+    arbitrated=0
+    while IFS= read -r line; do
+      name=$(printf '%s' "$line" | sed -n 's/^- `\([^`]*\)`.*/\1/p')
+      [ -z "$name" ] && continue
+      if grep -qF -- "$name" "$ARB" 2>/dev/null || grep -qF -- "$name" "$LOCAL_ARB" 2>/dev/null; then
+        arbitrated=$((arbitrated+1))
+      fi
+    done <<< "$matches"
+
+    [ "$arbitrated" -ge 2 ] && continue   # already a real contest in the prose
+
+    if [ "$printed_header" = 0 ]; then
+      echo
+      echo "## Possible unarbitrated overlap"
+      echo
+      echo "Detected by keyword on the descriptions above. A **signal, not a verdict** —"
+      echo "these skills may overlap, and no published argument settles them."
+      echo "Writing one is the most useful contribution this skill can receive."
+      printed_header=1
+    fi
+    echo
+    echo "### $terrain — $count installed, $arbitrated arbitrated"
+    printf '%s\n' "$matches" | sed -n 's/^- `\([^`]*\)`.*/- `\1`/p'
+  done < <(terrains)
+} >> "$OUT"
+
+# Count only the catalogue proper. The overlap section repeats names already
+# counted above, so counting the whole file inflates the total.
+n=$(sed '/^## Possible unarbitrated overlap/,$d' "$OUT" | grep -c '^- ')
+echo "wrote $OUT ($n skills)"
+grep -q '^## Possible unarbitrated overlap' "$OUT" &&
+  echo "  note: unarbitrated overlap detected — see the end of the file"

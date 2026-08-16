@@ -59,6 +59,14 @@ As soon as the chain touches debugging, TDD, code review, framing or handover, r
 
 Never offer two competing skills and leave the choice open. Decide, and give the reason in one line.
 
+**Also read `references/arbitration.local.md` if it exists.** That is where this person settles their own duplicates, and it wins over the shipped file on any skill both mention. The shipped arbitration is fixed prose about specific skills; theirs is about the skills they actually run.
+
+**And check the end of the catalogue.** `build-catalogue.sh` appends a *Possible unarbitrated overlap* section when it finds several installed skills covering the same ground with no published argument between them. If the terrain you are routing through appears there, say so plainly rather than picking silently:
+
+> You have three review skills installed — `/review`, `/superpowers:receiving-code-review`, `/postgresql-code-review` — and I have an argument for only one of them. I am putting `/review` in the chain because it is the pre-landing pass, but treat that as a default, not a verdict. Writing the missing argument into `references/arbitration.local.md` is worth more than any answer I can give you here.
+
+That admission is not a weakness of the answer, it is the honest edge of it. A router that hides the gap is the one that sends people to the wrong skill with confidence.
+
 ### 5. Name what you do not run
 
 Always present, never empty. Two sources: the steps subtracted in step 2, and the skills the person could reasonably have considered but that do not fit here. One line of reason each.

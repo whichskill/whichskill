@@ -17,3 +17,6 @@ __pycache__/
 
 # generated per machine by scripts/build-catalogue.sh — never committed
 references/catalogue.md
+
+# your own arbitration, yours alone
+references/arbitration.local.md

@@ -69,9 +69,47 @@ The step that makes the difference is subtraction. Someone who arrives with a bu
 python3 scripts/run-evals.py
 ```
 
-Four evals, eighteen assertions, run against a fixed fixture catalogue so results do not depend on what you happen to have installed. They check the things that are easy to get wrong: that a finished diagnosis is subtracted instead of repeated, that `/triage` is not confused with `/to-tickets`, that a one-skill answer is not padded, and that a French question gets a French answer.
+Four evals, eighteen assertions. They check the things that are easy to get wrong: that a finished diagnosis is subtracted instead of repeated, that `/triage` is not confused with `/to-tickets`, that a one-skill answer is not padded, and that a French question gets a French answer.
 
-They measure routing quality, not triggering — the harness injects the skill rather than letting the harness discover it.
+Two limits worth knowing before you trust a green run:
+
+- **They measure routing quality, not triggering.** The harness injects the skill rather than letting discovery happen, so whether the frontmatter description actually surfaces the skill is untested.
+- **The fixture catalogue is not authoritative.** The runner inlines `evals/fixtures/catalogue.md` as the skill's catalogue, but the agent running underneath also sees the skills genuinely installed on that machine, and it may route on those instead — measured directly, it says so out loud when asked. So a green run on a machine that happens to have the same packs proves less than it looks. Isolating this needs a machine with a different pack set.
+
+## Arbitrating your own duplicates
+
+The shipped arbitration is fixed prose about specific skills. The catalogue can filter it, but it cannot invent an argument for skills nobody has written about — that would be exactly the confident, hollow answer this skill exists to prevent.
+
+So two things happen instead.
+
+**It tells you where the gap is.** `build-catalogue.sh` compares what you have installed against what the arbitration covers, and appends a section when it finds several skills on the same ground with no argument between them:
+
+```
+## Possible unarbitrated overlap
+
+### review — 3 installed, 1 arbitrated
+- `/review`
+- `/superpowers:receiving-code-review`
+- `/postgresql-code-review`
+```
+
+Keyword matching on descriptions is crude, so this is a signal, not a verdict. A missed overlap costs nothing; a claimed one that is wrong would cost trust.
+
+**You can settle them yourself.** Create `references/arbitration.local.md` and the router reads it alongside the shipped one, with yours winning on any skill both mention. It is gitignored, so it survives updates and never ends up in a pull request by accident.
+
+```markdown
+## Reviewing code
+
+`/code-review` (Matt Pocock) · `/postgresql-code-review`
+
+- **`/postgresql-code-review`** on anything touching schema, JSONB or query plans —
+  it knows the anti-patterns the generic review cannot see.
+- **`/code-review`** everywhere else.
+```
+
+Three parts make an arbitration: the competitors, which one wins by default, and — for each loser — the situation where it wins instead. Without the third it is a preference, not an arbitration.
+
+If yours is good, send it upstream.
 
 ## Scope, honestly
 
