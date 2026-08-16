@@ -109,7 +109,7 @@ regarde.
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/15 — **mergée** (squash, `4d4dda8`), branche supprimée.
+https://github.com/OmarBenje/whichskill/pull/15 — **mergée** (squash, `4d4dda8`), branche supprimée.
 
 ## Points de suivi
 

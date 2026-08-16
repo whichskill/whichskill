@@ -94,7 +94,7 @@ final avait la même forme.
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/9 — **mergée** (merge commit `e557cca`), branche
+https://github.com/OmarBenje/whichskill/pull/9 — **mergée** (merge commit `e557cca`), branche
 supprimée. CI verte.
 
 ## Points de suivi

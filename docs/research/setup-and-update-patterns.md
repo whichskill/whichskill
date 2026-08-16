@@ -42,7 +42,7 @@ Deux conséquences immédiates :
 2. Le skill s'auto-répare pour le catalogue : `SKILL.md` ligne 16 dit de régénérer s'il manque. Il
    ne s'auto-répare pas pour l'arbitrage local, qui est par nature irremplaçable.
 
-Vérifié aussi : `npx skills add whichskill/whichskill` copie **tout le dépôt**, 140 Ko, y compris
+Vérifié aussi : `npx skills add OmarBenje/whichskill` copie **tout le dépôt**, 140 Ko, y compris
 `.github/workflows/ci.yml`, `site/index.html` et les six rapports de PR. La correction du YAML
 (PR #6) tient — l'install échouait avant, elle passe maintenant.
 
@@ -120,7 +120,7 @@ met les deux — le catalogue généré *et* l'arbitrage manuscrit — exactemen
 efface. Déplacer `arbitration.local.md` vers `~/.which-skill/` supprime la perte de données quelle
 que soit la voie d'installation. Le catalogue peut suivre ou rester : il se régénère.
 
-**2. Documenter la seconde voie d'installation, et son coût.** `npx skills add whichskill/whichskill`
+**2. Documenter la seconde voie d'installation, et son coût.** `npx skills add OmarBenje/whichskill`
 marche et sera la voie majoritaire une fois le dépôt indexé. Le README n'en dit rien et affirme, sur
 la foi de `git pull`, une durabilité qui ne tient pas là. Deux lignes de README et un avertissement.
 

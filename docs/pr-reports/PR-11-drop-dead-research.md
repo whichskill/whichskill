@@ -93,7 +93,7 @@ immédiat en exécutant.
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/11 — **mergée** (squash), branche supprimée.
+https://github.com/OmarBenje/whichskill/pull/11 — **mergée** (squash), branche supprimée.
 
 ## Points de suivi
 

@@ -63,7 +63,7 @@ L'échec d'origine a été reproduit avant d'être corrigé, pas seulement raiso
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/7 — **mergée**, branche supprimée. CI verte.
+https://github.com/OmarBenje/whichskill/pull/7 — **mergée**, branche supprimée. CI verte.
 
 ## Points de suivi
 
