@@ -117,6 +117,12 @@ The arbitration is opinionated, and it covers the packs it names. It does not kn
 
 Where an arbitration is missing, the skill says so rather than guessing.
 
+That gap is not assumed, it is measured. A survey of about twenty skill directories
+([notes](docs/research/directories-by-chain.md), in French) found exactly one published arbitration
+between competing skills — gstack's "Which review should I use?", which covers reviews only and
+never leaves its own pack. Plenty of projects publish an ordered workflow; choosing *between* two
+skills that do almost the same job is the part nobody writes down.
+
 Contributions that add a chain or settle a new piece of contested ground are the useful kind. An arbitration entry needs three things: the competing skills, which one wins by default, and — for each loser — the situation where it wins instead. That last line is not politeness, it is the part that makes the verdict trustworthy.
 
 ## Licence
