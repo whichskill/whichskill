@@ -16,22 +16,61 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: The catalogue must never be tracked
-        # references/catalogue.md is generated per machine by build-catalogue.sh.
+      - name: No personal file may be tracked
+        # Both of these are per-person. The catalogue is generated from one
+        # machine's installed packs; the local arbitration is hand-written.
+        # Committing either makes the router speak with someone else's mouth.
         #
-        # It is not merely "not committed with real content" — it is not tracked
-        # at all, and that distinction is the update path. While it was tracked,
-        # generating it left every user's working tree permanently dirty, and any
-        # future commit touching the file aborted their `git pull` with "Please
-        # commit your changes or stash them before you merge." An install that
-        # cannot be updated is worse than one that fails loudly.
+        # For the catalogue it is not merely "not committed with real content" —
+        # it is not tracked at all, and that distinction is the update path.
+        # While it was tracked, generating it left every user's working tree
+        # permanently dirty, and any future commit touching the file aborted
+        # their `git pull` with "Please commit your changes or stash them before
+        # you merge." An install that cannot be updated is worse than one that
+        # fails loudly.
+        #
+        # Fix either with: git rm --cached <file>
         run: |
-          if git ls-files --error-unmatch references/catalogue.md >/dev/null 2>&1; then
-            echo "::error file=references/catalogue.md::The catalogue is tracked again."
-            echo "It must stay generated-and-ignored, or every user's git pull breaks."
-            echo "Fix with: git rm --cached references/catalogue.md"
+          fail=0
+          for f in references/catalogue.md references/arbitration.local.md; do
+            if git ls-files --error-unmatch "$f" >/dev/null 2>&1; then
+              echo "::error file=$f::$f is tracked. It is per-person and must stay out of git."
+              fail=1
+            fi
+          done
+          exit $fail
+
+      - name: A hand-written arbitration survives a skill update
+        # The reason this file moved out of the skill folder. `npx skills update`
+        # overwrites the skill directory wholesale, which was measured to delete
+        # references/arbitration.local.md with no warning. The generator migrates
+        # anyone still holding one at the old path — if that migration breaks,
+        # the next update silently eats their work.
+        run: |
+          export WHICH_SKILL_HOME="$HOME/.which-skill-citest"
+          mkdir -p "$HOME/.claude/skills" "$HOME/.claude/plugins/cache"
+          printf '## Reviewing code\n\n- `/mine` wins.\n' > references/arbitration.local.md
+
+          bash scripts/build-catalogue.sh
+
+          if [ -f references/arbitration.local.md ]; then
+            echo "::error::the legacy arbitration was left in the skill folder, where an update destroys it"
             exit 1
           fi
+          if ! grep -q '/mine' "$WHICH_SKILL_HOME/arbitration.local.md"; then
+            echo "::error::the arbitration did not arrive intact at $WHICH_SKILL_HOME"
+            exit 1
+          fi
+
+          # Two files, no destination clash: neither may be silently overwritten.
+          printf 'legacy again\n' > references/arbitration.local.md
+          bash scripts/build-catalogue.sh | grep -q 'BOTH' \
+            || { echo "::error::a collision between old and new paths was not reported"; exit 1; }
+          grep -q '/mine' "$WHICH_SKILL_HOME/arbitration.local.md" \
+            || { echo "::error::the existing arbitration was overwritten by the legacy one"; exit 1; }
+
+          rm -f references/arbitration.local.md references/catalogue.md
+          rm -rf "$WHICH_SKILL_HOME"
 
       - name: SKILL.md must stay discoverable
         # No frontmatter, no name, or no description means the harness never

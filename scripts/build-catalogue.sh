@@ -13,6 +13,38 @@ OUT="$HERE/references/catalogue.md"
 SKILLS="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 PLUGINS="${CLAUDE_PLUGINS_DIR:-$HOME/.claude/plugins/cache}"
 
+# Your own arbitration lives OUTSIDE the skill directory, and that placement is
+# the whole point of it.
+#
+# `npx skills update` refreshes a skill by replacing its folder with upstream.
+# Measured, not assumed: a hand-written references/arbitration.local.md is
+# deleted by it — no warning, no diff, no backup. The generated catalogue dying
+# the same way is survivable, because SKILL.md notices it is missing and
+# regenerates it. A hand-written argument nobody can regenerate is not.
+#
+# This is also what the neighbours do: gstack keeps user state in ~/.gstack,
+# and the Matt Pocock suite keeps its per-repo config in the target repo's
+# docs/agents. Neither leaves anything personal where the updater walks.
+WS_HOME="${WHICH_SKILL_HOME:-$HOME/.which-skill}"
+LOCAL_ARB="$WS_HOME/arbitration.local.md"
+LEGACY_ARB="$HERE/references/arbitration.local.md"
+
+if [ -f "$LEGACY_ARB" ]; then
+  if [ -f "$LOCAL_ARB" ]; then
+    # Never overwrite either one. Two arbitrations is a situation only the
+    # person who wrote them can resolve.
+    echo "note: an arbitration exists at BOTH"
+    echo "        $LEGACY_ARB"
+    echo "        $LOCAL_ARB"
+    echo "      using the second; the first will be lost on the next skill update."
+  else
+    mkdir -p "$WS_HOME"
+    mv "$LEGACY_ARB" "$LOCAL_ARB"
+    echo "moved your arbitration out of the skill folder, where updates cannot reach it:"
+    echo "        $LOCAL_ARB"
+  fi
+fi
+
 # Pack attribution. gstack tags itself in its own description, so it is detected.
 # The Matt Pocock engineering suite does not tag itself, so it is listed by name;
 # that list is the one hand-maintained thing here, and it degrades gracefully —
@@ -103,8 +135,7 @@ emit() { # name, file
 # never a verdict. A missed overlap costs nothing; a claimed one that is wrong
 # would cost trust.
 # ---------------------------------------------------------------------------
-ARB="$HERE/references/arbitration.md"
-LOCAL_ARB="$HERE/references/arbitration.local.md"
+ARB="$HERE/references/arbitration.md"   # LOCAL_ARB is resolved at the top, outside this folder
 
 terrains() {
   cat <<'TERRAINS'

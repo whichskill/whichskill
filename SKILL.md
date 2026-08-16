@@ -59,11 +59,13 @@ As soon as the chain touches debugging, TDD, code review, framing or handover, r
 
 Never offer two competing skills and leave the choice open. Decide, and give the reason in one line.
 
-**Also read `references/arbitration.local.md` if it exists.** That is where this person settles their own duplicates, and it wins over the shipped file on any skill both mention. The shipped arbitration is fixed prose about specific skills; theirs is about the skills they actually run.
+**Also read `~/.which-skill/arbitration.local.md` if it exists.** That is where this person settles their own duplicates, and it wins over the shipped file on any skill both mention. The shipped arbitration is fixed prose about specific skills; theirs is about the skills they actually run.
+
+It sits outside the skill folder on purpose: `npx skills update` replaces a skill by overwriting its directory, so anything hand-written inside it is destroyed without warning. If you find one at the old path — `references/arbitration.local.md` — read it anyway, and tell the person to run `scripts/build-catalogue.sh`, which moves it somewhere an update cannot reach.
 
 **And check the end of the catalogue.** `build-catalogue.sh` appends a *Possible unarbitrated overlap* section when it finds several installed skills covering the same ground with no published argument between them. If the terrain you are routing through appears there, say so plainly rather than picking silently:
 
-> You have three review skills installed — `/review`, `/superpowers:receiving-code-review`, `/postgresql-code-review` — and I have an argument for only one of them. I am putting `/review` in the chain because it is the pre-landing pass, but treat that as a default, not a verdict. Writing the missing argument into `references/arbitration.local.md` is worth more than any answer I can give you here.
+> You have three review skills installed — `/review`, `/superpowers:receiving-code-review`, `/postgresql-code-review` — and I have an argument for only one of them. I am putting `/review` in the chain because it is the pre-landing pass, but treat that as a default, not a verdict. Writing the missing argument into `~/.which-skill/arbitration.local.md` is worth more than any answer I can give you here.
 
 That admission is not a weakness of the answer, it is the honest edge of it. A router that hides the gap is the one that sends people to the wrong skill with confidence.
 
