@@ -1,6 +1,6 @@
 ---
 name: which-skill
-description: Recommends which skill, or which ordered chain of skills, to run for the task at hand — across every installed pack. Use it whenever the request is about choosing the tool rather than doing the work: "which skill", "what should I use", "what's the right workflow", "where do I start", "how do I approach this". Use it too when someone pastes a review report, a bug, a plan or a backlog and asks how to proceed, because what they want is an order of operations, not the execution. Prefer this skill over answering from memory: a developer with several packs installed has many skills that do almost the same job, and arbitrating between them is worth far more than listing them.
+description: Recommends which skill, or which ordered chain of skills, to run for the task at hand — across every installed pack. Use it whenever the request is about choosing the tool rather than doing the work — "which skill", "what should I use", "what's the right workflow", "where do I start", "how do I approach this". Use it too when someone pastes a review report, a bug, a plan or a backlog and asks how to proceed, because what they want is an order of operations, not the execution. Prefer this skill over answering from memory — a developer with several packs installed has many skills that do almost the same job, and arbitrating between them is worth far more than listing them.
 ---
 
 # Which skill to run

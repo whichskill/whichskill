@@ -33,10 +33,33 @@ jobs:
         # No frontmatter, no name, or no description means the harness never
         # surfaces the skill. It fails by being invisible, which is the hardest
         # failure to notice.
+        #
+        # Parsed with a STRICT YAML parser, not grepped. Claude Code accepts
+        # frontmatter that stricter installers reject, so a grep for the line
+        # passes while the skill is unusable elsewhere. That is not theoretical:
+        # an unquoted `: ` inside the description shipped in the first release,
+        # and `npx skills add whichskill/whichskill` answered "No valid skills
+        # found" — a clone that installs nothing, silently.
         run: |
-          head -1 SKILL.md | grep -qx -- '---' || { echo "::error::SKILL.md does not open with YAML frontmatter"; exit 1; }
-          grep -qE '^name: which-skill$' SKILL.md || { echo "::error::SKILL.md frontmatter has no correct name:"; exit 1; }
-          grep -qE '^description: .{80,}' SKILL.md || { echo "::error::SKILL.md needs a substantial description: — it is what triggers the skill"; exit 1; }
+          python3 - <<'PY'
+          import sys, yaml
+          text = open("SKILL.md", encoding="utf-8").read()
+          if not text.startswith("---"):
+              sys.exit("::error::SKILL.md does not open with YAML frontmatter")
+          block = text.split("---", 2)[1]
+          try:
+              fm = yaml.safe_load(block)
+          except yaml.YAMLError as e:
+              sys.exit(f"::error file=SKILL.md::frontmatter is not valid YAML — strict installers will skip this skill entirely.\n{e}")
+          if not isinstance(fm, dict):
+              sys.exit("::error file=SKILL.md::frontmatter did not parse to a mapping")
+          if fm.get("name") != "which-skill":
+              sys.exit(f"::error file=SKILL.md::name must be 'which-skill', got {fm.get('name')!r}")
+          desc = fm.get("description") or ""
+          if len(desc) < 80:
+              sys.exit("::error file=SKILL.md::description is what triggers the skill; it needs to be substantial")
+          print(f"frontmatter OK — description is {len(desc)} chars")
+          PY
 
       - name: Shell scripts parse and lint
         run: |
