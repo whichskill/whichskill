@@ -81,14 +81,14 @@ conserve ses 30 entrées — si la classification s'était cassée, elles seraie
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/2 — **mergée** (merge commit `97b5db8`), branche
+https://github.com/OmarBenje/whichskill/pull/2 — **mergée** (merge commit `97b5db8`), branche
 supprimée. CI verte au moment du merge.
 
 ## Suite : PR #3 et #4
 
-- **#3** — https://github.com/whichskill/whichskill/pull/3, mergée. Portait la mise à jour de ce
+- **#3** — https://github.com/OmarBenje/whichskill/pull/3, mergée. Portait la mise à jour de ce
   fichier : l'état mergé de #2, et `shellcheck` passé de « non vérifié » à « rouge, corrigé, vert ».
-- **#4** — https://github.com/whichskill/whichskill/pull/4, mergée. Rattrape deux défauts de #3 :
+- **#4** — https://github.com/OmarBenje/whichskill/pull/4, mergée. Rattrape deux défauts de #3 :
   le commit qui consignait #3 n'a pas atterri sur `main`, et la numérotation ci-dessous sautait
   le point 3.
 

@@ -7,7 +7,7 @@ Question posée : « je pourrais le publier sur skills.sh après ? »
 Plutôt que de répondre de mémoire, test direct de leur outil sur le dépôt publié :
 
 ```
-$ npx skills@latest add whichskill/whichskill --list
+$ npx skills@latest add OmarBenje/whichskill --list
 ◇  Repository cloned
 ⚠  Skipped SKILL.md — YAML parse error: Nested mappings are not allowed
    in compact mappings at line 2, column 14
@@ -64,7 +64,7 @@ l'existence, pas la validité.
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/6 — **mergée** (merge commit `520808d`), branche supprimée. CI verte au moment du merge.
+https://github.com/OmarBenje/whichskill/pull/6 — **mergée** (merge commit `520808d`), branche supprimée. CI verte au moment du merge.
 
 ## Points de suivi
 

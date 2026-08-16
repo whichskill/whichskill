@@ -33,13 +33,13 @@ look has already failed.
 ## Install
 
 ```bash
-git clone https://github.com/whichskill/whichskill ~/.claude/skills/which-skill
+git clone https://github.com/OmarBenje/whichskill ~/.claude/skills/which-skill
 bash ~/.claude/skills/which-skill/scripts/build-catalogue.sh
 ```
 
 **The second command is not optional.** The router refuses to invoke a skill name that is not in `references/catalogue.md`, and that catalogue lists what is installed on *your* machine. The repository ships no catalogue at all — shipping the author's would make the router confidently recommend commands you do not have. Re-run it whenever you add or remove a pack.
 
-`npx skills add whichskill/whichskill` works too, and installs into `~/.agents/skills/which-skill` with a symlink from `~/.claude/skills/`. Run the catalogue command against that path instead. Read the update note below before choosing it.
+`npx skills add OmarBenje/whichskill` works too, and installs into `~/.agents/skills/which-skill` with a symlink from `~/.claude/skills/`. Run the catalogue command against that path instead. Read the update note below before choosing it.
 
 ## Updating
 

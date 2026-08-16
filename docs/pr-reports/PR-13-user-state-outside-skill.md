@@ -32,7 +32,7 @@ Deux pertes de nature différente :
 - **Le catalogue** — non-événement. `SKILL.md` ligne 16 constate son absence et le régénère.
 - **L'arbitrage écrit à la main** — irrécupérable. Personne ne peut le reconstituer.
 
-Et c'est la voie que les annuaires vont alimenter : `npx skills add whichskill/whichskill`
+Et c'est la voie que les annuaires vont alimenter : `npx skills add OmarBenje/whichskill`
 fonctionne depuis la correction du frontmatter (PR #6), et le README n'en disait pas un mot.
 
 ## Ce qui a changé
@@ -97,7 +97,7 @@ document annexe. Si le correctif avait été refusé, la note n'avait pas sa pla
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/13 — **mergée** (squash, `11f31e7`), branche supprimée.
+https://github.com/OmarBenje/whichskill/pull/13 — **mergée** (squash, `11f31e7`), branche supprimée.
 
 ## Points de suivi
 

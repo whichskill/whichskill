@@ -81,7 +81,7 @@ jobs:
         # frontmatter that stricter installers reject, so a grep for the line
         # passes while the skill is unusable elsewhere. That is not theoretical:
         # an unquoted `: ` inside the description shipped in the first release,
-        # and `npx skills add whichskill/whichskill` answered "No valid skills
+        # and `npx skills add OmarBenje/whichskill` answered "No valid skills
         # found" — a clone that installs nothing, silently.
         run: |
           python3 - <<'PY'
