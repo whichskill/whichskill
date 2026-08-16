@@ -37,7 +37,15 @@ git clone https://github.com/whichskill/whichskill ~/.claude/skills/which-skill
 bash ~/.claude/skills/which-skill/scripts/build-catalogue.sh
 ```
 
-**The second command is not optional.** The router refuses to invoke a skill name that is not in `references/catalogue.md`, and that catalogue lists what is installed on *your* machine. It ships empty on purpose — shipping the author's would make the router confidently recommend commands you do not have. Re-run it whenever you add or remove a pack.
+**The second command is not optional.** The router refuses to invoke a skill name that is not in `references/catalogue.md`, and that catalogue lists what is installed on *your* machine. The repository ships no catalogue at all — shipping the author's would make the router confidently recommend commands you do not have. Re-run it whenever you add or remove a pack.
+
+## Updating
+
+```bash
+git -C ~/.claude/skills/which-skill pull
+```
+
+Your generated catalogue is ignored by git, so it survives the pull untouched and never conflicts with it.
 
 Then just ask, in any session:
 

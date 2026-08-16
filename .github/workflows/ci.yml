@@ -16,16 +16,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: The catalogue must never be committed
-        # references/catalogue.md is generated from whoever runs the script.
-        # Committing a real one makes the router recommend commands the person
-        # installing this does not have — confident, and useless. This is the
-        # single most likely accident in this repo, so it fails the build.
+      - name: The catalogue must never be tracked
+        # references/catalogue.md is generated per machine by build-catalogue.sh.
+        #
+        # It is not merely "not committed with real content" — it is not tracked
+        # at all, and that distinction is the update path. While it was tracked,
+        # generating it left every user's working tree permanently dirty, and any
+        # future commit touching the file aborted their `git pull` with "Please
+        # commit your changes or stash them before you merge." An install that
+        # cannot be updated is worse than one that fails loudly.
         run: |
-          if ! grep -q 'NOT GENERATED' references/catalogue.md; then
-            echo "::error file=references/catalogue.md::A generated catalogue was committed."
-            echo "references/catalogue.md must keep its NOT GENERATED placeholder."
-            echo "Restore it with: git checkout main -- references/catalogue.md"
+          if git ls-files --error-unmatch references/catalogue.md >/dev/null 2>&1; then
+            echo "::error file=references/catalogue.md::The catalogue is tracked again."
+            echo "It must stay generated-and-ignored, or every user's git pull breaks."
+            echo "Fix with: git rm --cached references/catalogue.md"
             exit 1
           fi
 
@@ -75,4 +79,4 @@ jobs:
           bash scripts/build-catalogue.sh
           grep -q '^## gstack$' references/catalogue.md
           grep -q '^## Standalone$' references/catalogue.md
-          git checkout -- references/catalogue.md
+          rm references/catalogue.md   # untracked, so there is nothing to check out
