@@ -1,3 +1,12 @@
+> **Why this file is kept.** It is the sourced argument for this skill existing at all: a survey of
+> roughly twenty skill directories that found exactly **one** published arbitration between competing
+> skills anywhere — gstack's "Which review should I use?", which covers reviews only and never leaves
+> its own pack. It also falsified the premise it set out to confirm, which is the reason to keep the
+> note rather than the summary. Written in French, and left that way: retranslating sourced claims is
+> how they drift.
+>
+> It survives an abandoned website project; the survey is about the terrain, not the site.
+
 # Étape 0 — Existe-t-il déjà un annuaire de skills organisé par chaînes ?
 
 Recherche du 2026-08-14, en réponse à l'étape 0 bloquante du design doc skillflow.
