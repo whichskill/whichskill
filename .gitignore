@@ -18,5 +18,8 @@ __pycache__/
 # generated per machine by scripts/build-catalogue.sh — never committed
 references/catalogue.md
 
-# your own arbitration, yours alone
+# Your own arbitration now lives in ~/.which-skill/, outside this folder, because
+# `npx skills update` overwrites the skill directory and destroys anything
+# hand-written in it. This entry stays for anyone still holding one at the old
+# path — build-catalogue.sh moves it on the next run.
 references/arbitration.local.md

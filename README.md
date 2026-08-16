@@ -39,13 +39,22 @@ bash ~/.claude/skills/which-skill/scripts/build-catalogue.sh
 
 **The second command is not optional.** The router refuses to invoke a skill name that is not in `references/catalogue.md`, and that catalogue lists what is installed on *your* machine. The repository ships no catalogue at all — shipping the author's would make the router confidently recommend commands you do not have. Re-run it whenever you add or remove a pack.
 
+`npx skills add whichskill/whichskill` works too, and installs into `~/.agents/skills/which-skill` with a symlink from `~/.claude/skills/`. Run the catalogue command against that path instead. Read the update note below before choosing it.
+
 ## Updating
 
 ```bash
-git -C ~/.claude/skills/which-skill pull
+git -C ~/.claude/skills/which-skill pull      # git install
+npx skills update                              # npx install
 ```
 
-Your generated catalogue is ignored by git, so it survives the pull untouched and never conflicts with it.
+**These two are not equivalent, and the difference costs you something.**
+
+`git pull` leaves your generated catalogue untouched — it is gitignored, so it neither conflicts nor disappears.
+
+`npx skills update` refreshes a skill by **overwriting its directory with upstream**. Measured, not assumed: it deletes anything you generated or wrote inside the skill folder, with no warning and no backup. The catalogue coming back is a non-event — the router notices it is missing and rebuilds it. That is why your own arbitration lives in `~/.which-skill/`, outside the skill folder, where no update can reach it.
+
+If you have one at the old path, `references/arbitration.local.md`, run `scripts/build-catalogue.sh` once: it moves the file for you and says so.
 
 Then just ask, in any session:
 
@@ -95,7 +104,7 @@ So two things happen instead.
 
 Keyword matching on descriptions is crude, so this is a signal, not a verdict. A missed overlap costs nothing; a claimed one that is wrong would cost trust.
 
-**You can settle them yourself.** Create `references/arbitration.local.md` and the router reads it alongside the shipped one, with yours winning on any skill both mention. It is gitignored, so it survives updates and never ends up in a pull request by accident.
+**You can settle them yourself.** Create `~/.which-skill/arbitration.local.md` and the router reads it alongside the shipped one, with yours winning on any skill both mention. It lives outside the skill folder so that no update, by either path, can delete it — and it can never end up in a pull request by accident.
 
 ```markdown
 ## Reviewing code
