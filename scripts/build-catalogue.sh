@@ -119,11 +119,19 @@ session-safety|destructive|guard rail|guardrail|restrict file edits
 TERRAINS
 }
 
+# Written to a temp file first, then appended. Reading $OUT inside a block whose
+# stdout is redirected onto $OUT is reading and writing one file in a single
+# pipeline: it happens to work while the output is small, and stops being true
+# without warning.
+OVERLAP=$(mktemp)
+trap 'rm -f "$OVERLAP"' EXIT
+
 {
   printed_header=0
   while IFS= read -r spec; do
-    terrain=${spec%%|*}; pattern=${spec#*|}; pattern=${pattern//|/\\|}
-    matches=$(grep -iE -- "$(echo "$pattern" | sed 's/\\|/|/g')" "$OUT" 2>/dev/null | grep '^- ' || true)
+    # The rest of the line is already a valid ERE alternation: kw1|kw2|kw3.
+    terrain=${spec%%|*}; pattern=${spec#*|}
+    matches=$(grep -iE -- "$pattern" "$OUT" 2>/dev/null | grep '^- ' || true)
     [ -z "$matches" ] && continue
     count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
     [ "$count" -lt 2 ] && continue
@@ -131,6 +139,7 @@ TERRAINS
     # How many of them does the published (or local) arbitration actually name?
     arbitrated=0
     while IFS= read -r line; do
+      # shellcheck disable=SC2016  # a sed script, not a shell expansion
       name=$(printf '%s' "$line" | sed -n 's/^- `\([^`]*\)`.*/\1/p')
       [ -z "$name" ] && continue
       if grep -qF -- "$name" "$ARB" 2>/dev/null || grep -qF -- "$name" "$LOCAL_ARB" 2>/dev/null; then
@@ -151,13 +160,22 @@ TERRAINS
     fi
     echo
     echo "### $terrain — $count installed, $arbitrated arbitrated"
+    # shellcheck disable=SC2016  # a sed script, not a shell expansion
     printf '%s\n' "$matches" | sed -n 's/^- `\([^`]*\)`.*/- `\1`/p'
   done < <(terrains)
-} >> "$OUT"
+} > "$OVERLAP"
+
+cat "$OVERLAP" >> "$OUT"
 
 # Count only the catalogue proper. The overlap section repeats names already
 # counted above, so counting the whole file inflates the total.
-n=$(sed '/^## Possible unarbitrated overlap/,$d' "$OUT" | grep -c '^- ')
+# `|| true` again: grep -c exits 1 on zero matches, and an empty machine is a
+# legitimate result, not a failure. Assigning it to a variable propagates that
+# status under `set -e`, where the old inline form inside echo hid it.
+n=$(sed '/^## Possible unarbitrated overlap/,$d' "$OUT" | grep -c '^- ' || true)
 echo "wrote $OUT ($n skills)"
-grep -q '^## Possible unarbitrated overlap' "$OUT" &&
+# `|| true` is load-bearing under `set -e`: no overlap is the good case, and
+# without it a clean run exits non-zero on its very last line.
+if grep -q '^## Possible unarbitrated overlap' "$OUT"; then
   echo "  note: unarbitrated overlap detected — see the end of the file"
+fi || true
