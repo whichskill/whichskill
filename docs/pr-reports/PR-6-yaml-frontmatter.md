@@ -64,7 +64,7 @@ l'existence, pas la validité.
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/6
+https://github.com/whichskill/whichskill/pull/6 — **mergée** (merge commit `520808d`), branche supprimée. CI verte au moment du merge.
 
 ## Points de suivi
 

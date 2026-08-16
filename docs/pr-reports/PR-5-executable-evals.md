@@ -75,7 +75,7 @@ Réserver `chain_contains` aux étapes réellement non négociables est maintena
 
 ## PR
 
-https://github.com/whichskill/whichskill/pull/5
+https://github.com/whichskill/whichskill/pull/5 — **mergée** (merge commit `29ce6c5`), branche supprimée. CI verte au moment du merge.
 
 ## Points de suivi
 
