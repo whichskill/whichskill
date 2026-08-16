@@ -265,6 +265,9 @@ if [ "${1:-}" = "--audit" ]; then
     # the prose — `rm`, `git push` — out of the report. An audit that cries
     # wolf is an audit nobody reads, so it under-reports on purpose: a skill
     # written bare, like git-guardrails-claude-code, is not checked.
+    # shellcheck disable=SC2016  # the backticks are literal characters in the
+    # grep pattern — skill names are written `like this` in the prose — not a
+    # command substitution the shell should expand.
     grep -oE '`(/[A-Za-z0-9:_.-]+|[A-Za-z0-9_.-]+:[A-Za-z0-9:_.-]+)`' "$src" \
       | tr -d '`' | sort -u | while read -r nm; do
         bare=${nm#/}
