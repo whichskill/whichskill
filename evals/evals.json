@@ -24,7 +24,8 @@
         { "type": "contains", "value": "/review", "why": "the pre-landing pass must be accounted for. `contains`, not `chain_contains`, for the same reason as /freeze above — dropping it because /code-review's two axes cover a branch this size, and saying so with the condition that would bring it back, is a correct call." },
         { "type": "chain_before", "value": ["/tdd", "/to-tickets"], "why": "the red test comes before the ticket, not after — the load-bearing ordering claim of this chain" },
         { "type": "contains", "value": "/cso", "why": "D3 is a class of flaw; a bypassed guard rarely implies only one" },
-        { "type": "contains_any", "value": ["do not run", "don't run", "not running"], "why": "the exclusions section is mandatory and is what turns advice into a decision" }
+        { "type": "contains_any", "value": ["do not run", "don't run", "not running"], "why": "the exclusions section is mandatory and is what turns advice into a decision" },
+        { "type": "chain_max_steps", "value": 7, "why": "SKILL.md's own ceiling, on the richest prompt in the suite — the one that most invites a long chain. Until a review counted them, six of the canonical chains in references/chains.md exceeded seven, one of them by double, and no assertion noticed." }
       ]
     },
     {
@@ -37,7 +38,8 @@
         { "type": "chain_contains", "value": "/triage", "why": "60 issues the user did not write is exactly what triage is for, and not what /to-tickets is for" },
         { "type": "chain_absent", "value": "/spec", "why": "nothing to frame — the code exists and is the specification" },
         { "type": "chain_absent", "value": "/office-hours", "why": "the decision to build was taken in 2022" },
-        { "type": "contains_any", "value": ["/domain-audit", "/health"], "why": "reading the domain or measuring quality is the natural second step after the map" }
+        { "type": "contains_any", "value": ["/domain-audit", "/health"], "why": "reading the domain or measuring quality is the natural second step after the map" },
+        { "type": "chain_max_steps", "value": 7, "why": "a vague, wide-open prompt is where padding is cheapest — 40k lines, 60 issues and no tests could justify naming almost anything" }
       ]
     },
     {
@@ -59,6 +61,17 @@
         { "type": "chain_contains", "value": "/diagnosing-bugs", "why": "the bug is intermittent and the default debugger already failed on it — the documented condition for switching" },
         { "type": "chain_absent", "value": "/investigate", "why": "it was run yesterday and produced three unverified hypotheses" },
         { "type": "contains_any", "value": ["parce que", "qui ", " pas ", "cette ", "déjà"], "why": "the answer must be in French: the skill answers in the person's language, and nothing else in this suite tests that rule" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "no-such-skill",
+      "prompt": "we have a module that got over-engineered over two years — layers of indirection nobody needs, a factory that builds one thing, three abstractions with a single implementation each. I want it simplified. it's all covered by tests and the tests pass. which skill?",
+      "expected_output": "The trap is a name that sounds inevitable and does not exist. `code-simplifier` is a plugin AGENT, not a skill, and no generated catalogue can ever contain it — this exact name sat in references/chains.md until a review checked every name against the disk. The correct answer routes through skills that do exist (/improve-codebase-architecture, /codebase-design, /to-tickets, /implement, /review) or says plainly that nothing installed covers the need.",
+      "assertions": [
+        { "type": "chain_absent", "value": "code-simplifier", "why": "the regression this eval exists for. It is an agent, not a skill, absent from every catalogue — and it shipped inside a canonical chain for weeks. `chain_absent` matches the bare name, so it catches both the slashed and unslashed spellings." },
+        { "type": "chain_max_steps", "value": 7, "why": "a refactor prompt is an invitation to recite the whole lifecycle" },
+        { "type": "contains_any", "value": ["do not run", "don't run", "not running", "ne lances pas"], "why": "the exclusions section is where an honest router says which tempting name it refused, and why" }
       ]
     }
   ]

@@ -104,6 +104,33 @@ jobs:
           print(f"frontmatter OK — description is {len(desc)} chars")
           PY
 
+      - name: No canonical chain exceeds seven steps
+        # SKILL.md: "Three to seven steps. Past seven, you did not do step 2."
+        # SKILL.md:52 also sends the model to chains.md as the canon to start
+        # from. So a nine-step canonical chain does not merely break a rule, it
+        # teaches the model to break it — and the README's first promise is that
+        # this skill never returns a long list of names.
+        #
+        # Six of thirty-six chains were over the ceiling, one at fourteen steps,
+        # for as long as the file existed. Nothing noticed, because nothing
+        # counted. Now something counts.
+        run: |
+          python3 - <<'PY'
+          import re, sys
+          bad = []
+          for i, line in enumerate(open("references/chains.md", encoding="utf-8"), 1):
+              if "→" not in line:
+                  continue
+              steps = line.count("→") + 1
+              if steps > 7:
+                  bad.append((i, steps, line.strip()[:70]))
+          for i, n, text in bad:
+              print(f"::error file=references/chains.md,line={i}::chain has {n} steps, ceiling is 7 — {text}")
+          if bad:
+              sys.exit(f"{len(bad)} chain(s) over the seven-step ceiling SKILL.md declares")
+          print("every chain is within the ceiling")
+          PY
+
       - name: Shell scripts parse and lint
         run: |
           bash -n scripts/build-catalogue.sh
