@@ -11,9 +11,18 @@ What this measures, and what it does not:
   frontmatter description is a different question, and one this harness cannot
   answer because it injects the skill rather than letting discovery happen.
 
-The fixture catalogue is used deliberately instead of a generated one: a suite
-that depends on the author's installed skills is not reproducible, which is the
-same defect the shipped NOT GENERATED placeholder exists to prevent.
+  It does NOT fully isolate the CATALOGUE either, and this was measured rather
+  than assumed. The fixture below is inlined as the skill's catalogue, but the
+  agent underneath also sees the skills genuinely installed on the machine
+  running it, and will route on those in preference — asked directly with a
+  deliberately altered fixture, it answered "j'ai donc routé sur la liste de
+  skills réellement chargée dans la session". So on a machine whose packs
+  resemble the fixture, a green run proves less than it appears. Isolating this
+  properly needs a machine with a different pack set.
+
+The fixture is still hand-written rather than generated, for the reason that
+holds regardless: no third party's skill descriptions are redistributed here to
+make a test pass.
 
 Usage:
     python3 scripts/run-evals.py            # all evals
