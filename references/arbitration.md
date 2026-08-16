@@ -14,25 +14,27 @@ Four packs installed side by side means three debuggers, two TDDs, three code re
 
 ## Writing tested code first
 
-`/tdd` (Matt Pocock) · `/superpowers:test-driven-development`
+`/tdd` (Matt Pocock) · `superpowers:test-driven-development`
 
-- **`/tdd`** if `/implement` is in the chain — `/implement` drives it internally, and mixing them puts two competing disciplines on one diff.
-- **`superpowers:test-driven-development`** inside a superpowers chain (`brainstorming` → `writing-plans` → `executing-plans`).
+- **`/tdd`** by default. It is the discipline for a diff you are about to write, and it needs nothing around it.
+- **`superpowers:test-driven-development`** inside a superpowers chain (`superpowers:brainstorming` → `superpowers:writing-plans` → `superpowers:executing-plans`), where the surrounding steps expect its vocabulary.
+
+**Neither, next to `/implement`.** `/implement` drives test-first internally. Putting either of these on the same diff runs two disciplines against each other. Choose `/implement`, or choose `/tdd` and drive the diff yourself.
 
 ## Reviewing code
 
-`/code-review` (Matt Pocock) · `/review` (gstack) · `/superpowers:requesting-code-review`
+`/code-review` (Matt Pocock) · `/review` (gstack) · `superpowers:requesting-code-review` · `/codex`
 
-All three, at different moments — they are not competitors.
+Contested ground — the catalogue's overlap detector flags it, and rightly. What separates them is the moment, not the quality, so the decision is *when*. It is still a decision.
 
+- **`/review`** if you run only one. The pre-landing pass on the branch's full diff, and the one whose absence you notice.
 - **`/code-review`** at the end of each ticket. Two axes: does the code follow the repo's documented standards, and does it do what the issue asked.
-- **`/review`** before `/ship`. The pre-landing review of the branch's full diff.
 - **`superpowers:requesting-code-review`** when you want an independent subagent to verify the work answers the request.
 - **`/codex`** in addition, not instead, when the stakes justify a second model on the same diff.
 
 ## Framing an idea
 
-`/office-hours` · `/spec` (gstack) · `/grill-with-docs` · `superpowers:brainstorming`
+`/office-hours` · `/spec` (gstack) · `/grill-with-docs` · `/grill-me` · `/wayfinder` · `superpowers:brainstorming`
 
 - **`/office-hours`** when the question is "is this worth building".
 - **`/grill-with-docs`** when it is "what exactly does this mean". Stateful: it leaves a `CONTEXT.md` and ADRs behind. With no working directory, `/grill-me` runs the same interview without the trace.
@@ -51,15 +53,17 @@ All three, at different moments — they are not competitors.
 
 `/handoff` (Matt Pocock) · `/context-save` (gstack) · `/compact` (native)
 
-- **`/compact`** by default, at a phase boundary.
+- **`/compact`** by default, at a phase boundary. It is a native harness command, not an installed skill, so it never appears in the catalogue and the "never invent a name" rule does not reach it — see the exception in `SKILL.md`.
 - **`/context-save`** when you are the one resuming later, with `/context-restore` facing it.
 - **`/handoff`** only for another harness, another directory, or a human. What it buys is portability; otherwise it costs more than it returns. `/claude-handoff` goes further: it launches the agent that takes over.
 
 ## Routing
 
-`/gstack` · `/ask-matt` · `/find-skills`
+`/which-skill` · `/gstack` · `/ask-matt` · `/find-skills`
 
-- **`/gstack`** routes within gstack, **`/ask-matt`** within the engineering suite. Both ignore the other packs.
+- **`/which-skill`** by default — this skill. It is the only one that crosses packs, and crossing packs is the whole problem. Naming yourself as the default in your own arbitration is self-serving unless the reason is checkable: the others cannot see outside their pack, and you can verify that in one reading of their descriptions.
+- **`/gstack`** when the work is entirely inside gstack and you want its own vocabulary — it knows its skills better than any outsider can.
+- **`/ask-matt`** likewise inside the engineering suite.
 - **`/find-skills`** when nothing installed covers the need and one has to be found outside.
 
 ## Making a skill
@@ -74,6 +78,7 @@ All three, at different moments — they are not competitors.
 
 `/careful` · `/guard` · `/freeze` · `git-guardrails-claude-code`
 
-- **`/careful`** warns on destructive commands. **`/guard`** adds the editing perimeter. `/guard` contains `/careful`: do not install both.
+- **`/guard`** by default: it warns on destructive commands *and* adds the editing perimeter. It contains `/careful`, so do not install both.
+- **`/careful`** when you want the warnings without the perimeter — a session that must stay free to edit anywhere, on a repo where a wrong `rm` costs more than a wrong file. It is also the one to keep if `/guard`'s perimeter fights your workflow instead of protecting it.
 - **`/freeze`** restricts edits to one directory for the session, `/unfreeze` releases. Useful during a targeted fix to prevent drift.
 - **`git-guardrails-claude-code`** installs hooks that block `git push`, `reset --hard` and friends before execution. That is a one-time install, not a chain step.

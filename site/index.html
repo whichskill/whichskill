@@ -88,9 +88,14 @@ once the first look has already failed.
 bash ~/.claude/skills/which-skill/scripts/build-catalogue.sh</pre>
 
   <p><strong>The second command is not optional.</strong> The router refuses to name a skill that
-  is not in its catalogue, and that catalogue lists what is installed on <em>your</em> machine. It
-  ships empty on purpose — shipping the author's would make the router confidently recommend
-  commands you do not have. Run it again whenever you add or remove a pack.</p>
+  is not in its catalogue, and that catalogue lists what is installed on <em>your</em> machine. The
+  repository ships no catalogue at all — shipping the author's would make the router confidently
+  recommend commands you do not have. Run it again whenever you add or remove a pack.</p>
+
+  <p><code>npx skills add whichskill/whichskill</code> works too. Note that
+  <code>npx skills update</code> replaces the skill's folder wholesale, so anything you write
+  inside it is lost — which is why your own arbitration lives in
+  <code>~/.which-skill/</code>, out of its reach.</p>
 
   <p>Then, in any session: <code>which skill do I run for this?</code></p>
 

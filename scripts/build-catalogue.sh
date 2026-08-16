@@ -85,7 +85,11 @@ emit() { # name, file
   echo
   echo "## superpowers"
   echo
-  for f in "$PLUGINS"/*/superpowers/*/skills/*/SKILL.md; do
+  # Several versions of the pack can sit side by side (6.2.0, 6.3.0). The dedupe
+  # at the end of this pipeline keeps whichever arrives FIRST, and the glob is
+  # lexical, so without sorting the OLDER version's description wins — silently,
+  # and it reads exactly like the current one.
+  for f in $(printf '%s\n' "$PLUGINS"/*/superpowers/*/skills/*/SKILL.md | sort -Vr); do
     [ -e "$f" ] || continue
     emit "superpowers:$(basename "$(dirname "$f")")" "$f"
   done
@@ -106,7 +110,9 @@ emit() { # name, file
     desc "$f" | grep -q '(gstack)' && continue
     # tr pads a short destination set with its last character, so both spaces
     # and newlines become newlines: one name per line, ready for grep -x.
-    echo "$MATT" | tr ' \n' '\n' | grep -qx "$n" && continue
+    # -F because a skill directory is a filename, not a pattern: a name holding
+    # a `.` or a `+` would otherwise match neighbours it has nothing to do with.
+    echo "$MATT" | tr ' \n' '\n' | grep -qxF "$n" && continue
     emit "$n" "$f"
   done
   # Plugin skills are invoked as `plugin:skill`, so that is how they must be
@@ -136,6 +142,12 @@ emit() { # name, file
 # would cost trust.
 # ---------------------------------------------------------------------------
 ARB="$HERE/references/arbitration.md"   # LOCAL_ARB is resolved at the top, outside this folder
+
+# Does $2 name the skill $1, in backticks, with or without its leading slash?
+_arb_names() {
+  [ -f "$2" ] || return 1
+  grep -qF -- "\`$1\`" "$2" || grep -qF -- "\`${1#/}\`" "$2"
+}
 
 terrains() {
   cat <<'TERRAINS'
@@ -173,7 +185,16 @@ trap 'rm -f "$OVERLAP"' EXIT
       # shellcheck disable=SC2016  # a sed script, not a shell expansion
       name=$(printf '%s' "$line" | sed -n 's/^- `\([^`]*\)`.*/\1/p')
       [ -z "$name" ] && continue
-      if grep -qF -- "$name" "$ARB" 2>/dev/null || grep -qF -- "$name" "$LOCAL_ARB" 2>/dev/null; then
+      # Match the name inside its backticks, not as a bare substring. `/review`
+      # occurs inside `/review-animations`, so a substring test counts a skill as
+      # arbitrated on the strength of a different skill's name — and silences a
+      # real overlap. Both files write every skill name in backticks.
+      #
+      # Try it without the leading slash too. This generator prefixes every entry
+      # with `/`, including plugin skills, while the prose writes those as
+      # `superpowers:brainstorming`. Matching only the slashed form reported the
+      # TDD and framing terrains as unarbitrated when both are in fact settled.
+      if _arb_names "$name" "$ARB" || _arb_names "$name" "$LOCAL_ARB"; then
         arbitrated=$((arbitrated+1))
       fi
     done <<< "$matches"
@@ -205,8 +226,60 @@ cat "$OVERLAP" >> "$OUT"
 # status under `set -e`, where the old inline form inside echo hid it.
 n=$(sed '/^## Possible unarbitrated overlap/,$d' "$OUT" | grep -c '^- ' || true)
 echo "wrote $OUT ($n skills)"
-# `|| true` is load-bearing under `set -e`: no overlap is the good case, and
-# without it a clean run exits non-zero on its very last line.
+
+# An `if` whose condition is false and which has no `else` returns 0, so no
+# `|| true` is needed here. A previous comment claimed otherwise and was wrong:
+# it was reasoned about instead of run, which is how dead code acquires a
+# defender and outlives the review that should have removed it.
 if grep -q '^## Possible unarbitrated overlap' "$OUT"; then
   echo "  note: unarbitrated overlap detected — see the end of the file"
-fi || true
+fi
+
+# Zero skills is a legitimate result on a fresh machine and a silent disaster on
+# a populated one: the router then believes nothing is installed and says so with
+# confidence. Distinguishing the two costs one line and needs the human.
+if [ "$n" -eq 0 ]; then
+  echo "  WARNING: no skills found under $SKILLS"
+  echo "           If you have packs installed elsewhere, set CLAUDE_SKILLS_DIR"
+  echo "           and re-run. Routing on an empty catalogue answers nothing."
+fi
+
+# --audit: the machine-side enforcement of "never invent a skill name".
+#
+# The prose files name roughly a hundred skills and nothing checked that any of
+# them exist. `code-simplifier` sat in the chains for weeks; it is a plugin
+# AGENT, not a skill, so no catalogue could ever contain it and the router was
+# being sent to a command nobody has.
+#
+# Not part of a normal run, and deliberately so: on someone else's machine most
+# of these names are legitimately absent, and printing a hundred lines of
+# "missing" would train them to ignore the output. This is an author's audit.
+if [ "${1:-}" = "--audit" ]; then
+  echo
+  echo "Auditing prose names against this machine's catalogue…"
+  REPORT=$(mktemp)
+  for src in "$HERE/references/chains.md" "$ARB"; do
+    [ -f "$src" ] || continue
+    # A skill name in these files either opens with `/` or carries a `plugin:`
+    # prefix. Requiring one of the two is what keeps shell commands quoted in
+    # the prose — `rm`, `git push` — out of the report. An audit that cries
+    # wolf is an audit nobody reads, so it under-reports on purpose: a skill
+    # written bare, like git-guardrails-claude-code, is not checked.
+    grep -oE '`(/[A-Za-z0-9:_.-]+|[A-Za-z0-9_.-]+:[A-Za-z0-9:_.-]+)`' "$src" \
+      | tr -d '`' | sort -u | while read -r nm; do
+        bare=${nm#/}
+        case "$bare" in
+          compact|clear|context) continue;;   # native harness commands
+        esac
+        grep -qF -- "\`/$bare\`" "$OUT" && continue
+        echo "  not installed here: $bare  ($(basename "$src"))"
+      done >> "$REPORT"
+  done
+  if [ -s "$REPORT" ]; then
+    cat "$REPORT"
+    echo "  (absent on YOUR machine is expected; absent on every machine is the bug)"
+  else
+    echo "  every name in the prose is installed here."
+  fi
+  rm -f "$REPORT"
+fi

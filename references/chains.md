@@ -5,12 +5,16 @@ A starting point, not a rail. Remove the steps already done and the ones the sit
 ## Web / product
 
 **End-to-end UI feature** — nothing exists; it has to be framed, designed, built, shipped.
-`/office-hours` → `/design-consultation` → `/spec` → `/autoplan` → `/implement` → `/browse` → `/design-review` → `/review` → `/ship` → `/canary`
+`/office-hours` → `/design-consultation` → `/spec` → `/autoplan` → `/implement` → `/design-review` → `/ship`
 
 `/autoplan` runs the four plan reviews (CEO, design, eng, DX) on its own with auto-decisions. To keep your hand on them, replace it with `/plan-ceo-review` → `/plan-design-review` → `/plan-eng-review` → `/plan-devex-review`.
 
+`/browse` is what `/design-review` drives, not a step in front of it. Add `/review` before `/ship` when the branch is large, and `/canary` after it when the deploy can hurt.
+
 **Visual polish on an existing screen** — it works, but it looks machine-made.
-`/browse` → `/design-review` → `/frontend-design:frontend-design` → `/emil-design-eng` → `/find-animation-opportunities` → `/improve-animations` → `/review-animations` → `/qa` → `/ship`
+`/browse` → `/design-review` → `/frontend-design:frontend-design` → `/emil-design-eng` → `/qa` → `/ship`
+
+Motion is its own chain, below. Deciding what should move is a different question from deciding what should look right; merging the two produces a chain nobody finishes.
 
 **Choosing a stack or a library** — the blocking question is "with what".
 `/pick-ui-library` → `/prototype` → `/grill-with-docs` → `/to-spec` → `/to-tickets`
@@ -34,20 +38,27 @@ The second `/benchmark` is not a repeat: it is the numeric proof the fix did som
 ## Backend, APIs, services
 
 **New service or module** — fix the interface before the implementation.
-`superpowers:brainstorming` → `/domain-modeling` → `/codebase-design` → `/spec` → `/plan-eng-review` → `superpowers:using-git-worktrees` → `/tdd` → `/code-review` → `/review` → `/ship`
+`superpowers:brainstorming` → `/domain-modeling` → `/spec` → `/plan-eng-review` → `/tdd` → `/review` → `/ship`
+
+Add `/codebase-design` when the module's shape is what is contested, `superpowers:using-git-worktrees` to isolate the work, and `/code-review` per ticket once the work splits into several.
 
 **Refactoring a module that aged badly**
-`/improve-codebase-architecture` → `/grill-with-docs` → `/codebase-design` → `/to-spec` → `/to-tickets` → `/implement` ×N → `code-simplifier` → `/review` → `/ship`
+`/improve-codebase-architecture` → `/codebase-design` → `/to-spec` → `/to-tickets` → `/implement` ×N → `/review` → `/ship`
 
-`/implement` runs once per ticket, context cleared between each.
+`/implement` runs once per ticket, context cleared between each. Add `/grill-with-docs` when a library's real behaviour is the unknown.
 
 **API, SDK or CLI for other developers** — the criterion is time to first successful call.
 `/plan-devex-review` → `/tdd` → `/devex-review` → `/wizard` → `/document-generate` → `/ship`
 
 ## Full-stack 0→1
 
-**Idea → shipped product**
-`/office-hours` → `/plan-ceo-review` → `/design-consultation` → `/spec` → `/autoplan` → `/to-tickets` → `/implement` ×N → `/qa` → `/cso` → `/review` → `/land-and-deploy` → `/canary` → `/document-release` → `/retro`
+**Idea → shipped product.** Three phases, and **you answer with the one the person is in** — never with all three. Fourteen steps in a row is not a chain, it is a roadmap, and nobody acts on a roadmap this afternoon.
+
+Framing — `/office-hours` → `/plan-ceo-review` → `/design-consultation` → `/spec` → `/autoplan`
+
+Building — `/to-tickets` → `/implement` ×N → `/qa` → `/cso` → `/review`
+
+Shipping — `/land-and-deploy` → `/canary` → `/document-release` → `/retro`
 
 `/land-and-deploy` does merge, deploy and verification in one move; `/ship` alone stops at the pull request. Insert `/context-save` before each break.
 
@@ -62,12 +73,14 @@ Wiring the map straight into `/implement` throws the detail away instead of cond
 ## iOS and SwiftUI
 
 **Full cycle**
-`/ios-sync` → `/ios-qa` → `/ios-fix` → `/ios-design-review` → `/apple-design` → `/review` → `/ship` → `/ios-clean`
+`/ios-sync` → `/ios-qa` → `/ios-fix` → `/ios-design-review` → `/review` → `/ship` → `/ios-clean`
 
-`/ios-clean` removes the DebugBridge and the `#if DEBUG` wiring — not to be forgotten before submission.
+`/ios-clean` removes the DebugBridge and the `#if DEBUG` wiring — not to be forgotten before submission. `/apple-design` replaces `/ios-design-review` when the question is conformance to the Human Interface Guidelines rather than this screen.
 
 **Isolated iOS bug**
-`/ios-qa` → `/investigate` → `/ios-fix` → `/tdd` → `/review`
+`/ios-qa` → `/investigate` → `/tdd` → `/ios-fix` → `/review`
+
+The red test comes before the fix, not after it. A fix written first is a fix whose test can only confirm what already passes.
 
 ## Data and PostgreSQL
 
@@ -100,7 +113,14 @@ Wiring the map straight into `/implement` throws the detail away instead of cond
 ## Debugging, legacy, maintenance
 
 **A bug that resists**
-`/diagnosing-bugs` → `/freeze` → `/tdd` → `/code-review` → `/ship` → `/learn`
+`/diagnosing-bugs` → `/freeze` → `/code-review` → `/ship` → `/learn`
+
+No `/tdd` here, and that is deliberate: `/diagnosing-bugs` refuses to theorise until a command goes red, then fixes against that test. Appending `/tdd` asks for a red test that already exists.
+
+**CI is red on a change you just made**
+`/investigate` → `/tdd` → `/review` → `/ship`
+
+Read the failing job's log first. A pipeline usually names its own cause, and reaching for `/investigate` on a cause you can already read is the subtraction step failing. When the failure is flaky rather than caused, `/diagnosing-bugs` instead — it refuses to theorise until it reproduces.
 
 **Picking up a codebase you did not write**
 `/graphify` → `/domain-audit` → `/health` → `/improve-codebase-architecture` → `/triage`
